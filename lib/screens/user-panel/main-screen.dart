@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopease/screens/auth-ui/welcome-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
+import 'package:shopease/widgets/banner-widget.dart';
+import 'package:shopease/widgets/category_widget.dart';
 import 'package:shopease/widgets/custom-drawer-widget.dart';
+import 'package:shopease/widgets/heading-widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -35,7 +38,29 @@ class _MainScreenState extends State<MainScreen> {
         physics: BouncingScrollPhysics(),
         child: Container(
             child: Column(
-          children: [],
+          children: [
+            SizedBox(height: Get.height/90.0,),
+            BannerWidet(),
+
+
+            HeadingWidget(
+
+              headingTitle: "Categories",
+              headSubTitle: "According to your budget",
+              onTap: (){},
+              buttonText: "See More >",
+            ),
+
+            CategoriesWidget(),
+            HeadingWidget(
+
+              headingTitle: "Flash Sale",
+              headSubTitle: "According to your budget",
+              onTap: (){},
+              buttonText: "See More >",
+            ),
+
+          ],
         )),
       ),
     );

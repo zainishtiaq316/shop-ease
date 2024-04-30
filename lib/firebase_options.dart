@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -44,38 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDZVgo--FI-FzWaCMdVBUMS4D-PVG3qWBI',
-    appId: '1:161810860912:web:2bed292e4540ae2c6dddb5',
-    messagingSenderId: '161810860912',
-    projectId: 'eccomerce-app-68c2a',
-    authDomain: 'eccomerce-app-68c2a.firebaseapp.com',
-    storageBucket: 'eccomerce-app-68c2a.appspot.com',
-    measurementId: 'G-RZJLYCB9BQ',
+    apiKey: 'AIzaSyAb5ThQ-ytLHhN5Y4GyQNQyvvvZKY9fQQ8',
+    appId: '1:28169414258:web:87b42fc6386d514b70c4eb',
+    messagingSenderId: '28169414258',
+    projectId: 'shop-ease-13fb5',
+    authDomain: 'shop-ease-13fb5.firebaseapp.com',
+    storageBucket: 'shop-ease-13fb5.appspot.com',
+    measurementId: 'G-N6DEBJXMS7',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDnfzwifR2T9-a253pcnSYZ0qLrXqdOjNQ',
-    appId: '1:161810860912:android:071f207a6f349ece6dddb5',
-    messagingSenderId: '161810860912',
-    projectId: 'eccomerce-app-68c2a',
-    storageBucket: 'eccomerce-app-68c2a.appspot.com',
+    apiKey: 'AIzaSyArm_aLy90eokRrs7XdE9hdFfM1MzY3yJk',
+    appId: '1:28169414258:android:401bf5fcfc231f7370c4eb',
+    messagingSenderId: '28169414258',
+    projectId: 'shop-ease-13fb5',
+    storageBucket: 'shop-ease-13fb5.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA3GSGnn9lJTVm4cN9_IR_LwMKAALVQLhY',
-    appId: '1:161810860912:ios:d1773dd46be27ae76dddb5',
-    messagingSenderId: '161810860912',
-    projectId: 'eccomerce-app-68c2a',
-    storageBucket: 'eccomerce-app-68c2a.appspot.com',
+    apiKey: 'AIzaSyABGAZnmPsxjO0W989bNxE_7EkkIMIcKQ8',
+    appId: '1:28169414258:ios:52d42c273556ab2970c4eb',
+    messagingSenderId: '28169414258',
+    projectId: 'shop-ease-13fb5',
+    storageBucket: 'shop-ease-13fb5.appspot.com',
     iosBundleId: 'com.example.shopease',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyA3GSGnn9lJTVm4cN9_IR_LwMKAALVQLhY',
-    appId: '1:161810860912:ios:17dbd0876bd21d6c6dddb5',
-    messagingSenderId: '161810860912',
-    projectId: 'eccomerce-app-68c2a',
-    storageBucket: 'eccomerce-app-68c2a.appspot.com',
-    iosBundleId: 'com.example.shopease.RunnerTests',
+    apiKey: 'AIzaSyABGAZnmPsxjO0W989bNxE_7EkkIMIcKQ8',
+    appId: '1:28169414258:ios:52d42c273556ab2970c4eb',
+    messagingSenderId: '28169414258',
+    projectId: 'shop-ease-13fb5',
+    storageBucket: 'shop-ease-13fb5.appspot.com',
+    iosBundleId: 'com.example.shopease',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyAb5ThQ-ytLHhN5Y4GyQNQyvvvZKY9fQQ8',
+    appId: '1:28169414258:web:ac9286f5de3d392570c4eb',
+    messagingSenderId: '28169414258',
+    projectId: 'shop-ease-13fb5',
+    authDomain: 'shop-ease-13fb5.firebaseapp.com',
+    storageBucket: 'shop-ease-13fb5.appspot.com',
+    measurementId: 'G-WT2ZQQB3D5',
+  );
+
 }

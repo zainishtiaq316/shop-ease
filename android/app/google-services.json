@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "161810860912",
-    "project_id": "eccomerce-app-68c2a",
-    "storage_bucket": "eccomerce-app-68c2a.appspot.com"
+    "project_number": "28169414258",
+    "project_id": "shop-ease-13fb5",
+    "storage_bucket": "shop-ease-13fb5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:161810860912:android:071f207a6f349ece6dddb5",
+        "mobilesdk_app_id": "1:28169414258:android:401bf5fcfc231f7370c4eb",
         "android_client_info": {
           "package_name": "com.example.shopease"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDnfzwifR2T9-a253pcnSYZ0qLrXqdOjNQ"
+          "current_key": "AIzaSyArm_aLy90eokRrs7XdE9hdFfM1MzY3yJk"
         }
       ],
       "services": {
