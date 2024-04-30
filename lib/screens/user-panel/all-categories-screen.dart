@@ -7,18 +7,25 @@ import 'package:get/get.dart';
 import 'package:image_card/image_card.dart';
 import 'package:shopease/models/categories-model.dart';
 import 'package:shopease/screens/user-panel/single-category-product-screen.dart';
+import 'package:shopease/utils/app-constant.dart';
 
-class CategoriesWidget extends StatefulWidget {
-  const CategoriesWidget({super.key});
+class AllCategoriesScreen extends StatefulWidget {
+  const AllCategoriesScreen({super.key});
 
   @override
-  State<CategoriesWidget> createState() => _CategoriesWidgetState();
+  State<AllCategoriesScreen> createState() => _AllCategoriesScreenState();
 }
 
-class _CategoriesWidgetState extends State<CategoriesWidget> {
+class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppConstant.appMainColor,
+        title: Text("All Categories"),
+      ),
+
+      body: FutureBuilder(
         future: FirebaseFirestore.instance.collection('categories').get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
@@ -38,17 +45,15 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
 
           if (snapshot.data!.docs.isEmpty) {
             return Center(
-              child: Text("No category found"),
+              child: Text("No categories found"),
             );
           }
           if (snapshot.data != null) {
-            return Container(
-              height: Get.height / 5.5,
-              child: ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
+            return GridView.builder(
+              itemCount: snapshot.data!.docs.length,
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, mainAxisSpacing: 3, crossAxisSpacing: 3, childAspectRatio: 1.19), itemBuilder: (context, index) {
                     CategoriesModel categoriesModel = CategoriesModel(
                         updatedAt: snapshot.data!.docs[index]['updatedAt'],
                         createdAt: snapshot.data!.docs[index]['createdAt'],
@@ -59,14 +64,14 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         GestureDetector(
-                          onTap: ()=>Get.to(()=>AllSingleCategoryProductScreen(categoryId: categoriesModel.categoryId)),
+                          onTap: ()=> Get.to(()=> AllSingleCategoryProductScreen(categoryId : categoriesModel.categoryId)),
                           child: Padding(
-                            padding: EdgeInsets.all(5.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Container(
                               child: FillImageCard(
                                 borderRadius: 20.0,
-                                width: Get.width/4,
-                                heightImage: Get.height/12
+                                width: Get.width/2.3,
+                                heightImage: Get.height/10
                                 ,
                                 imageProvider: CachedNetworkImageProvider(categoriesModel.categoryImg),
                                 title: Center(child: Text(categoriesModel.categoryName, style: TextStyle(fontSize: 12.0),)),
@@ -77,11 +82,23 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
                         )
                       ],
                     );
-                  }),
-            );
+                  } );
+            
+            
+            // Container(
+            //   height: Get.height / 5.5,
+            //   child: ListView.builder(
+            //       itemCount: snapshot.data!.docs.length,
+            //       shrinkWrap: true,
+            //       scrollDirection: Axis.horizontal,
+            //       ),
+            // );
+         
+         
           }
 
           return Container();
-        });
+        }),
+    );
   }
 }

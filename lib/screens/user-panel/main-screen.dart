@@ -4,10 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopease/screens/auth-ui/welcome-screen.dart';
+import 'package:shopease/screens/user-panel/all-categories-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 import 'package:shopease/widgets/banner-widget.dart';
 import 'package:shopease/widgets/category_widget.dart';
 import 'package:shopease/widgets/custom-drawer-widget.dart';
+import 'package:shopease/widgets/flash-sale-widget.dart';
 import 'package:shopease/widgets/heading-widget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -38,6 +40,7 @@ class _MainScreenState extends State<MainScreen> {
         physics: BouncingScrollPhysics(),
         child: Container(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: Get.height/90.0,),
             BannerWidet(),
@@ -47,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
 
               headingTitle: "Categories",
               headSubTitle: "According to your budget",
-              onTap: (){},
+              onTap: ()=> Get.to(()=>AllCategoriesScreen()),
               buttonText: "See More >",
             ),
 
@@ -59,6 +62,7 @@ class _MainScreenState extends State<MainScreen> {
               onTap: (){},
               buttonText: "See More >",
             ),
+            FlashSaleWidget()
 
           ],
         )),
