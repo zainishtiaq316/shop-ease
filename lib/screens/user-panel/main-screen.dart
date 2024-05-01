@@ -15,6 +15,8 @@ import 'package:shopease/widgets/custom-drawer-widget.dart';
 import 'package:shopease/widgets/flash-sale-widget.dart';
 import 'package:shopease/widgets/heading-widget.dart';
 
+import 'cart-screen.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -37,6 +39,16 @@ class _MainScreenState extends State<MainScreen> {
           style: TextStyle(color: AppConstant.appTextColor),
         ),
         centerTitle: true,
+        actions: [
+          
+          
+          GestureDetector(
+            onTap: ()=> Get.to(()=>CartScreen()),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.shopping_cart),
+            ),
+          )],
       ),
       drawer: DrawerWidget(),
       body: SingleChildScrollView(
