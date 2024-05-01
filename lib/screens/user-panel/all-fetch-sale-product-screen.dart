@@ -22,8 +22,9 @@ class _AllFetchSaleProductScreenState extends State<AllFetchSaleProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: AppConstant.appTextColor),
         backgroundColor: AppConstant.appMainColor,
-        title: Text("All Flash Sale Products"),
+        title: Text("All Flash Sale Products", style: TextStyle(color: AppConstant.appTextColor),),
       ),
 
       body: FutureBuilder(

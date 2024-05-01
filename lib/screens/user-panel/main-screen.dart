@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopease/screens/auth-ui/welcome-screen.dart';
 import 'package:shopease/screens/user-panel/all-categories-screen.dart';
+import 'package:shopease/screens/user-panel/all-fetch-sale-product-screen.dart';
+import 'package:shopease/screens/user-panel/all-products-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
+import 'package:shopease/widgets/all-products-widget.dart';
 import 'package:shopease/widgets/banner-widget.dart';
 import 'package:shopease/widgets/category_widget.dart';
 import 'package:shopease/widgets/custom-drawer-widget.dart';
@@ -59,10 +62,19 @@ class _MainScreenState extends State<MainScreen> {
 
               headingTitle: "Flash Sale",
               headSubTitle: "According to your budget",
-              onTap: (){},
+            onTap: ()=> Get.to(()=>AllFetchSaleProductScreen()),
               buttonText: "See More >",
             ),
-            FlashSaleWidget()
+            FlashSaleWidget(),
+             HeadingWidget(
+
+              headingTitle: "All Products",
+              headSubTitle: "According to your budget",
+             onTap: ()=> Get.to(()=>AllProductsScreen()),
+              buttonText: "See More >",
+            ),
+
+            AllProductsWidget()
 
           ],
         )),

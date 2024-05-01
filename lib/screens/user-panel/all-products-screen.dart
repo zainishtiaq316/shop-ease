@@ -8,6 +8,8 @@ import 'package:shopease/models/categories-model.dart';
 import 'package:shopease/models/product-model.dart';
 import 'package:shopease/utils/app-constant.dart';
 
+import 'product-detail-screen.dart';
+
 class AllProductsScreen extends StatefulWidget {
   const AllProductsScreen({super.key});
 
@@ -21,7 +23,7 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
     return Scaffold(
       appBar: AppBar(
 backgroundColor: AppConstant.appMainColor,
-        title: Text("All Products"),
+        title: Text("All Products", style: TextStyle(color: AppConstant.appTextColor),),
       ),
       body: FutureBuilder(
         future: FirebaseFirestore.instance
@@ -85,8 +87,9 @@ backgroundColor: AppConstant.appMainColor,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        // onTap: ()=> Get.to(()=> AllSingleCategoryProductScreen(categoryId : categoriesModel.categoryId)),
-                        child: Padding(
+                        onTap: ()=> Get.to(()=> ProductDetailsScreen(productModel: productModel))
+                        
+                        ,child: Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Container(
                             child: FillImageCard(

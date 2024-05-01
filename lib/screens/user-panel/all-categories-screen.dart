@@ -22,7 +22,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppConstant.appMainColor,
-        title: Text("All Categories"),
+        title: Text("All Categories", style: TextStyle(color: AppConstant.appTextColor),),
       ),
 
       body: FutureBuilder(
