@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:image_card/image_card.dart';
 import 'package:shopease/models/categories-model.dart';
 import 'package:shopease/models/product-model.dart';
+import 'package:shopease/screens/user-panel/product-detail-screen.dart';
 import 'package:shopease/screens/user-panel/single-category-product-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
@@ -81,7 +82,8 @@ class _AllFetchSaleProductScreenState extends State<AllFetchSaleProductScreen> {
                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         GestureDetector(
-                          // onTap: ()=> Get.to(()=> AllSingleCategoryProductScreen(categoryId : categoriesModel.categoryId)),
+                             onTap: ()=> Get.to(()=> ProductDetailsScreen(productModel: productModel))
+                        ,
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Container(
