@@ -40,54 +40,47 @@ class _MainScreenState extends State<MainScreen> {
         ),
         centerTitle: true,
         actions: [
-          
-          
           GestureDetector(
-            onTap: ()=> Get.to(()=>CartScreen()),
+            onTap: () => Get.to(() => CartScreen()),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(Icons.shopping_cart),
             ),
-          )],
+          )
+        ],
       ),
       drawer: DrawerWidget(),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Container(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: Get.height/90.0,),
+            SizedBox(
+              height: Get.height / 90.0,
+            ),
             BannerWidet(),
-
-
             HeadingWidget(
-
               headingTitle: "Categories",
               headSubTitle: "According to your budget",
-              onTap: ()=> Get.to(()=>AllCategoriesScreen()),
+              onTap: () => Get.to(() => AllCategoriesScreen()),
               buttonText: "See More >",
             ),
-
             CategoriesWidget(),
             HeadingWidget(
-
               headingTitle: "Flash Sale",
               headSubTitle: "According to your budget",
-            onTap: ()=> Get.to(()=>AllFetchSaleProductScreen()),
+              onTap: () => Get.to(() => AllFetchSaleProductScreen()),
               buttonText: "See More >",
             ),
             FlashSaleWidget(),
-             HeadingWidget(
-
+            HeadingWidget(
               headingTitle: "All Products",
               headSubTitle: "According to your budget",
-             onTap: ()=> Get.to(()=>AllProductsScreen()),
+              onTap: () => Get.to(() => AllProductsScreen()),
               buttonText: "See More >",
             ),
-
             AllProductsWidget()
-
           ],
         )),
       ),

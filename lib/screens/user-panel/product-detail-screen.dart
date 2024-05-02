@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shopease/models/cart-model.dart';
 import 'package:shopease/models/product-model.dart';
+import 'package:shopease/screens/user-panel/cart-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -28,6 +29,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       appBar: AppBar(
         backgroundColor: AppConstant.appMainColor,
         title: Text("Product Details"),
+           actions: [
+          
+          
+          GestureDetector(
+            onTap: ()=> Get.to(()=>CartScreen()),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.shopping_cart),
+            ),
+          )],
+     
+     
+     
       ),
       body: Container(
         child: Column(
