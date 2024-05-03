@@ -45,6 +45,7 @@ dependencies:
   google_sign_in: ^6.1.6
   image_card: ^0.0.4
   lottie: ^2.7.0
+  url_launcher: ^6.2.6
 
 dev_dependencies:
   flutter_lints: ^2.0.0

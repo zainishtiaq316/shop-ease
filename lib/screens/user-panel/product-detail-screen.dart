@@ -12,6 +12,7 @@ import 'package:shopease/models/cart-model.dart';
 import 'package:shopease/models/product-model.dart';
 import 'package:shopease/screens/user-panel/cart-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   ProductModel productModel;
@@ -138,7 +139,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     borderRadius: BorderRadius.circular(20.0)),
                                 child: TextButton(
                                   onPressed: () {
-                                    // Get.to(()=> SignInScreen());
+                                  sendMessageOnWhatsApp(productModel : widget.productModel);
                                   },
                                   child: Text(
                                     "WhatsApp",
@@ -185,6 +186,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
+
+   static Future<void> sendMessageOnWhatsApp({required ProductModel productModel})async{
+
+
+    final number = "+923028163676";
+    final message = "Hello Shop-ease \n i want to know about this product \n ${productModel.productName} \n${productModel.productId}";
+
+    final url = 'https://wa.me/$number?text=${Uri.encodeComponent(message)}';
+
+    // ignore: deprecated_member_use
+    if(await canLaunch(url)){
+      
+      // ignore: deprecated_member_use
+      await launch(url);
+    }else{
+
+      throw 'Could not launch $url';
+    }
+   }
   //checkl product exist or not
 
   Future<void> checkProductExistence(
