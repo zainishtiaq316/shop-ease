@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/app-constant.dart';
+
 class AdminMainScreen extends StatefulWidget {
   const AdminMainScreen({super.key});
 
@@ -10,6 +12,12 @@ class AdminMainScreen extends StatefulWidget {
 class _AdminMainScreenState extends State<AdminMainScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text("Admin Panel")),);
+    return Scaffold(
+      
+      
+      appBar: AppBar(
+        
+        backgroundColor: AppConstant.appMainColor,
+        title: Text("Admin Panel")),);
   }
 }
