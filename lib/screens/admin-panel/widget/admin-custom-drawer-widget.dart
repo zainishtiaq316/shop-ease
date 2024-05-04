@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/app-constant.dart';
+import '../../auth-ui/welcome-screen.dart';
 import '../admin-main-screen.dart';
 import '../screens/all-users-screen.dart';
 import '../screens/all_orders_screen.dart';
@@ -258,7 +260,13 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
                   //   Get.back();
                   //   await googleSignInController.signInWithGoogle();
                   // }
+                    GoogleSignIn googleSignIn = GoogleSignIn();
+                  FirebaseAuth _auth = FirebaseAuth.instance;
+                  await _auth.signOut();
+                  await googleSignIn.signOut();
+                  Get.offAll(WelcomeScreen());
                 },
+                
                 title: Text(
                   user != null ? 'Logout' : 'Login',
                   style: TextStyle(color: Colors.white),

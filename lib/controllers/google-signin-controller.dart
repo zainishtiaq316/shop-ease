@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
 
 import '../models/user-model.dart';
+import '../screens/admin-panel/admin-main-screen.dart';
 import 'getting-token.dart';
 
 class GoogleSignInController extends GetxController {
@@ -34,27 +35,47 @@ class GoogleSignInController extends GetxController {
         final User? user = userCredential.user;
 
         if (user != null) {
-          UserModel userModel = UserModel(
-              city: '',
-              country: '',
-              createdOn: DateTime.now(),
-              email: user.email.toString(),
-              isAdmin: false,
-              isActive: true,
-              phone: user.phoneNumber.toString(),
-              street: '',
-              uid: user.uid,
-              userAddress: '',
-              userDeviceToken: getDeviceTokenController.deviceToken.toString(),
-              userImg: user.photoURL.toString(),
-              username: user.displayName.toString());
-
-          await FirebaseFirestore.instance
+          final userDoc = await FirebaseFirestore.instance
               .collection('users')
               .doc(user.uid)
-              .set(userModel.toMap());
-          EasyLoading.dismiss();
-          Get.offAll(() => MainScreen());
+              .get();
+
+          if (userDoc.exists) {
+            // User exists, check isAdmin status
+            final userData = userDoc.data() as Map<String, dynamic>;
+            final isAdmin = userData['isAdmin'] ?? false;
+            EasyLoading.dismiss();
+            if (isAdmin) {
+              // User is admin, navigate to admin screen
+              Get.offAll(() => AdminMainScreen());
+            } else {
+              // User is not admin, navigate to main screen
+              Get.offAll(() => MainScreen());
+            }
+          } else {
+            UserModel userModel = UserModel(
+                city: '',
+                country: '',
+                createdOn: DateTime.now(),
+                email: user.email.toString(),
+                isAdmin: false,
+                isActive: true,
+                phone: user.phoneNumber.toString(),
+                street: '',
+                uid: user.uid,
+                userAddress: '',
+                userDeviceToken:
+                    getDeviceTokenController.deviceToken.toString(),
+                userImg: user.photoURL.toString(),
+                username: user.displayName.toString());
+
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(user.uid)
+                .set(userModel.toMap());
+            EasyLoading.dismiss();
+            Get.offAll(() => MainScreen());
+          }
         }
       }
     } catch (e) {
