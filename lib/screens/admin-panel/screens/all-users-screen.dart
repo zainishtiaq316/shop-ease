@@ -33,6 +33,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
       body: FutureBuilder(
         future: FirebaseFirestore.instance
             .collection('users')
+             
             .orderBy('createdOn', descending: true)
             .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -81,7 +82,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
                   createdOn: data['createdOn'],
                   city: data['city']
                 );
-
+                if(userModel.isAdmin == true)
                 return Card(
                   elevation: 5,
                   child: ListTile(
