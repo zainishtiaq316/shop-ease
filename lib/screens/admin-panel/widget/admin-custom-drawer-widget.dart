@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../utils/app-constant.dart';
 import '../admin-main-screen.dart';
 import '../screens/all-users-screen.dart';
+import '../screens/all_orders_screen.dart';
 
 
 class AdminDrawerWidget extends StatefulWidget {
@@ -157,7 +158,7 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: ListTile(
                 onTap: () {
-                  // Get.to(() => AllOrdersScreen());
+                   Get.to(() => AllUserOrdersScreen());
                 },
                 title: Text(
                   'Orders',

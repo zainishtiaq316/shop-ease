@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../utils/app-constant.dart';
+import 'widget/admin-custom-drawer-widget.dart';
 
 class AdminMainScreen extends StatefulWidget {
   const AdminMainScreen({super.key});
@@ -17,7 +18,16 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
       
       appBar: AppBar(
         
+        
         backgroundColor: AppConstant.appMainColor,
-        title: Text("Admin Panel")),);
+        title: Text("Admin Panel")),
+        
+        drawer: AdminDrawerWidget(),
+        );
+
+        
   }
+
+
+
 }
