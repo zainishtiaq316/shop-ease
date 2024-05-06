@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors, file_names, must_be_immutable, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
-import 'package:admin_panel/models/product-model.dart';
-import 'package:admin_panel/utils/constant.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../models/product-model.dart';
+import '../../../utils/app-constant.dart';
 
 class SingleProductDetailScreen extends StatelessWidget {
   ProductModel productModel;

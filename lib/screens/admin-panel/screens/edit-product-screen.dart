@@ -2,9 +2,7 @@
 
 import 'dart:io';
 
-import 'package:admin_panel/controllers/edit-product-controller.dart';
-import 'package:admin_panel/models/product-model.dart';
-import 'package:admin_panel/utils/constant.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,8 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
-import '../controllers/category-dropdown_controller.dart';
-import '../controllers/is-sale-controller.dart';
+import '../../../models/product-model.dart';
+import '../../../utils/app-constant.dart';
+import '../controller/category-dropdown_controller.dart';
+import '../controller/edit-product-controller.dart';
+import '../controller/is-sale-controller.dart';
+
+
 
 class EditProductScreen extends StatelessWidget {
   ProductModel productModel;
@@ -85,7 +88,7 @@ class EditProductScreen extends StatelessWidget {
                                   },
                                   child: CircleAvatar(
                                     backgroundColor:
-                                        AppConstant.appScendoryColor,
+                                        AppConstant.appSecondaryColor,
                                     child: Icon(
                                       Icons.close,
                                       color: AppConstant.appTextColor,
