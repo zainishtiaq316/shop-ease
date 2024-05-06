@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../utils/app-constant.dart';
 import '../../auth-ui/welcome-screen.dart';
 import '../admin-main-screen.dart';
+import '../screens/all-products-screen.dart';
 import '../screens/all-users-screen.dart';
 import '../screens/all_orders_screen.dart';
 
@@ -177,7 +178,7 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
               child: ListTile(
                 onTap: () {
                   Get.back();
-                  // Get.to(() => AllProductsScreen());
+                   Get.to(() => AllProductsScreen());
                 },
                 title: Text(
                   'Products',
