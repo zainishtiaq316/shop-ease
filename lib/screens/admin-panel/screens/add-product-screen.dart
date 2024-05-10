@@ -16,8 +16,6 @@ import '../controller/products-images-controller.dart';
 import '../widget/dropdown-categories-widget.dart';
 
 
-//15th
-
 class AddProductScreen extends StatelessWidget {
   AddProductScreen({super.key});
 

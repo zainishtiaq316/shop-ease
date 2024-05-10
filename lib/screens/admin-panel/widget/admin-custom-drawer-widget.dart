@@ -129,7 +129,7 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: ListTile(
                 onTap: () {
-                   Get.to(() => AdminMainScreen());
+                  Get.offAll(() => AdminMainScreen());
                 },
                 title: Text(
                   'Home',
@@ -161,7 +161,7 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: ListTile(
                 onTap: () {
-                   Get.to(() => AllUserOrdersScreen());
+                  Get.to(() => AllOrdersScreen());
                 },
                 title: Text(
                   'Orders',
@@ -178,7 +178,7 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
               child: ListTile(
                 onTap: () {
                   Get.back();
-                   Get.to(() => AllProductsScreen());
+                  Get.to(() => AllProductsScreen());
                 },
                 title: Text(
                   'Products',
@@ -261,13 +261,7 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
                   //   Get.back();
                   //   await googleSignInController.signInWithGoogle();
                   // }
-                    GoogleSignIn googleSignIn = GoogleSignIn();
-                  FirebaseAuth _auth = FirebaseAuth.instance;
-                  await _auth.signOut();
-                  await googleSignIn.signOut();
-                  Get.offAll(WelcomeScreen());
                 },
-                
                 title: Text(
                   user != null ? 'Logout' : 'Login',
                   style: TextStyle(color: Colors.white),
@@ -302,4 +296,5 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
       throw 'Could not launch $url';
     }
   }
+
 }

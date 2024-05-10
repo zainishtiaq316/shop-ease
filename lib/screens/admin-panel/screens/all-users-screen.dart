@@ -1,13 +1,14 @@
+// ignore_for_file: file_names, prefer_const_constructors, avoid_unnecessary_containers
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:shopease/utils/app-constant.dart';
 
 import '../../../models/user-model.dart';
-import '../controller/get_all_users_controller.dart';
+import '../../../utils/app-constant.dart';
+import '../controller/get-all-user-length-controller.dart';
 
 class AllUsersScreen extends StatefulWidget {
   const AllUsersScreen({super.key});
@@ -17,23 +18,21 @@ class AllUsersScreen extends StatefulWidget {
 }
 
 class _AllUsersScreenState extends State<AllUsersScreen> {
-   final GetUserLengthController _getUserLengthController =
+  final GetUserLengthController _getUserLengthController =
       Get.put(GetUserLengthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: AppBar(
+      appBar: AppBar(
         title: Obx(() {
           return Text(
               'Users (${_getUserLengthController.userCollectionLength.toString()})');
         }),
         backgroundColor: AppConstant.appMainColor,
       ),
-
       body: FutureBuilder(
         future: FirebaseFirestore.instance
             .collection('users')
-             
             .orderBy('createdOn', descending: true)
             .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -68,21 +67,20 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
                 final data = snapshot.data!.docs[index];
 
                 UserModel userModel = UserModel(
-                  uid: data['uid'],
-                  username: data['username'],
-                  email: data['email'],
-                  phone: data['phone'],
-                  userImg: data['userImg'],
-                  userDeviceToken: data['userDeviceToken'],
-                  country: data['country'],
-                  userAddress: data['userAddress'],
-                  street: data['street'],
-                  isAdmin: data['isAdmin'],
-                  isActive: data['isActive'],
-                  createdOn: data['createdOn'],
-                  city: data['city']
-                );
-                if(userModel.isAdmin == true)
+                    country: data['uid'],
+                    createdOn: data['createdOn'],
+                    city: data['city'],
+                    email: data['email'],
+                    isAdmin: data['isAdmin'],
+                    isActive: data['isActive'],
+                    phone: data['phone'],
+                    street: data['street'],
+                    uid: data['uid'],
+                    userAddress: data['userAddress'],
+                    userDeviceToken: data['userDeviceToken'],
+                    userImg: data['userImg'],
+                    username: data['username']);
+
                 return Card(
                   elevation: 5,
                   child: ListTile(

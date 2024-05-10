@@ -18,7 +18,6 @@ import 'add-product-screen.dart';
 import 'edit-product-screen.dart';
 import 'product-detail-screen.dart';
 
-
 class AllProductsScreen extends StatefulWidget {
   const AllProductsScreen({super.key});
 
@@ -194,5 +193,3 @@ class _AllProductsScreenState extends State<AllProductsScreen> {
     }
   }
 }
-
-//23

@@ -8,7 +8,7 @@ class GenerateIds {
     String uuid = const Uuid().v4();
 
     //customize id
-    formatedProductId = "shop-ease-${uuid.substring(0, 5)}";
+    formatedProductId = "easy-shopping-${uuid.substring(0, 5)}";
 
     //return
     return formatedProductId;
