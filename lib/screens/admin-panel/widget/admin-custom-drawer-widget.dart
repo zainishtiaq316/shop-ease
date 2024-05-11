@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shopease/screens/admin-panel/screens/all_categories_screen.dart';
 import 'package:shopease/screens/user-panel/all-categories-screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -199,7 +200,7 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
                   Get.back();
               
 
-                   Get.to(() => AllCategoriesScreen());
+                   Get.to(() => AllCategoriesScreenAdmin());
                 
                 },
                 title: Text(

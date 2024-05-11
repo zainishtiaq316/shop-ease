@@ -11,14 +11,14 @@ import 'package:shopease/utils/app-constant.dart';
 
 import 'add_category_screen.dart';
 
-class AllCategoriesScreen extends StatefulWidget {
-  AllCategoriesScreen({super.key});
+class AllCategoriesScreenAdmin extends StatefulWidget {
+  AllCategoriesScreenAdmin({super.key});
 
   @override
-  State<AllCategoriesScreen> createState() => _AllCategoriesScreenState();
+  State<AllCategoriesScreenAdmin> createState() => _AllCategoriesScreenState();
 }
 
-class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
+class _AllCategoriesScreenState extends State<AllCategoriesScreenAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
