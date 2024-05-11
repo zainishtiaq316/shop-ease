@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shopease/screens/user-panel/all-categories-screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../utils/app-constant.dart';
@@ -196,11 +197,10 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
                 titleAlignment: ListTileTitleAlignment.center,
                 onTap: () async {
                   Get.back();
-                  EasyLoading.show(status: "Please wait");
+              
 
-                  // Get.to(() => ContactScreen());
-                  await sendMessage();
-                  EasyLoading.dismiss();
+                   Get.to(() => AllCategoriesScreen());
+                
                 },
                 title: Text(
                   'Categories',
@@ -234,8 +234,13 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: ListTile(
-                onTap: () {
+                 onTap: () async {
+                  Get.back();
+                  EasyLoading.show(status: "Please wait");
+
                   // Get.to(() => ContactScreen());
+                  await sendMessage();
+                  EasyLoading.dismiss();
                 },
                 title: Text(
                   'Contact',
