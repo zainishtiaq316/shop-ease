@@ -275,6 +275,7 @@ class _AdminDrawerWidgetState extends State<AdminDrawerWidget> {
                   user != null ? Icons.logout : Icons.login,
                   color: Colors.white,
                 ),
+                
               ),
             )
           ],
