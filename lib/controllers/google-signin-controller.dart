@@ -6,7 +6,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
 
 import '../models/user-model.dart';
-import '../screens/admin-panel/admin-main-screen.dart';
 import 'getting-token.dart';
 
 class GoogleSignInController extends GetxController {
@@ -46,8 +45,10 @@ class GoogleSignInController extends GetxController {
             final isAdmin = userData['isAdmin'] ?? false;
             EasyLoading.dismiss();
             if (isAdmin) {
-              // User is admin, navigate to admin screen
-              Get.offAll(() => AdminMainScreen());
+             // User is not admin, show error message
+              EasyLoading.showError("Error: Only users are allowed.");
+              await _auth.signOut();
+              await googleSignIn.signOut();
             } else {
               // User is not admin, navigate to main screen
               Get.offAll(() => MainScreen());

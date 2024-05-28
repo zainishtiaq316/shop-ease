@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shopease/controllers/get-user-data-controller.dart';
-import 'package:shopease/screens/admin-panel/admin-main-screen.dart';
 import 'package:shopease/screens/auth-ui/welcome-screen.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
@@ -24,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 3), () {
-     loggedIn(context);
+      loggedIn(context);
     });
   }
 
@@ -33,9 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
       final GetUserDataController getUserDataController =
           Get.put(GetUserDataController());
       var userData = await getUserDataController.getUserData(user!.uid);
-      if (userData[0]['isAdmin'] == true) {
-        Get.offAll(() => AdminMainScreen());
-      } else {
+      if (userData[0]['isAdmin'] == false) {
         Get.offAll(() => MainScreen());
       }
     } else {

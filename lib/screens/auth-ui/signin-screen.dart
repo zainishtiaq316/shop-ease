@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shopease/controllers/get-user-data-controller.dart';
 import 'package:shopease/controllers/signin-controller.dart';
-import 'package:shopease/screens/admin-panel/admin-main-screen.dart';
 import 'package:shopease/screens/auth-ui/signup-screen.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
@@ -203,9 +202,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             //
                             if (userCredential.user!.emailVerified) {
                               if (userData[0]['isAdmin'] == true) {
-                                Get.offAll(() => AdminMainScreen());
-                                Get.snackbar("Success Admin Login",
-                                    "Login Scuccessfully!",
+                               Get.snackbar(
+                                    "Error", "Only users are allowed.",
                                     snackPosition: SnackPosition.BOTTOM,
                                     backgroundColor:
                                         AppConstant.appSecondaryColor,
