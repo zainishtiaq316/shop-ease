@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shopease/screens/home_page.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
 
 import '../models/user-model.dart';
@@ -51,7 +52,7 @@ class GoogleSignInController extends GetxController {
               await googleSignIn.signOut();
             } else {
               // User is not admin, navigate to main screen
-              Get.offAll(() => MainScreen());
+              Get.offAll(() => HomePageView());
             }
           } else {
             UserModel userModel = UserModel(

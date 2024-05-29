@@ -1,9 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:shopease/screens/auth-ui/splash-screen.dart';
+import 'package:shopease/screens/user-panel/main-screen.dart';
+import 'package:shopease/utils/app-constant.dart';
 import 'package:shopease/widgets/custom-drawer-widget.dart';
+
+import 'user-panel/cart-screen.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -53,10 +59,7 @@ class _HomePageViewState extends State<HomePageView> {
     const TextStyle optionStyle =
         TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
     const List<Widget> _widgetOptions = <Widget>[
-      Text(
-        'Home',
-        style: optionStyle,
-      ),
+      MainScreen(),
       Text(
         'Likes',
         style: optionStyle,
@@ -77,23 +80,32 @@ class _HomePageViewState extends State<HomePageView> {
           backgroundColor: Colors.white,
           drawer: DrawerWidget(),
           appBar: AppBar(
+             iconTheme: IconThemeData(color: AppConstant.appTextColor),
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: AppConstant.appSecondaryColor,
+            statusBarIconBrightness: Brightness.light),
+        backgroundColor: AppConstant.appMainColor,
+          centerTitle: true,
             title: Text(
               _selectedIndex == 0
-                  ? 'Home'
+                  ? '${ AppConstant.appMainName}'
                   : _selectedIndex == 1
                       ? 'Likes'
                       : _selectedIndex == 2
                           ? 'Search'
                           : 'Profile',
+
+                 style: TextStyle(color: AppConstant.appTextColor),
             ),
             actions: _selectedIndex == 0
                 ? [
-                    IconButton(
-                      icon: Icon(Icons.shopping_cart),
-                      onPressed: () {
-                        // Handle cart action
-                      },
-                    ),
+                   GestureDetector(
+            onTap: () => Get.to(() => CartScreen()),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.shopping_cart),
+            ),
+          )
                   ]
                 : [],
           ),

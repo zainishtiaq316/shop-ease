@@ -27,30 +27,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: AppConstant.appTextColor),
-        systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: AppConstant.appSecondaryColor,
-            statusBarIconBrightness: Brightness.light),
-        backgroundColor: AppConstant.appMainColor,
-        title: Text(
-          AppConstant.appMainName,
-          style: TextStyle(color: AppConstant.appTextColor),
-        ),
-        centerTitle: true,
-        actions: [
-          GestureDetector(
-            onTap: () => Get.to(() => CartScreen()),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.shopping_cart),
-            ),
-          )
-        ],
-      ),
-      drawer: DrawerWidget(),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: Container(
             child: Column(
@@ -83,7 +60,70 @@ class _MainScreenState extends State<MainScreen> {
             AllProductsWidget()
           ],
         )),
-      ),
-    );
+      );
+    
+    
+    
+    
+    // Scaffold(
+    //   appBar: AppBar(
+    //     iconTheme: IconThemeData(color: AppConstant.appTextColor),
+    //     systemOverlayStyle: SystemUiOverlayStyle(
+    //         statusBarColor: AppConstant.appSecondaryColor,
+    //         statusBarIconBrightness: Brightness.light),
+    //     backgroundColor: AppConstant.appMainColor,
+    //     title: Text(
+    //       AppConstant.appMainName,
+    //       style: TextStyle(color: AppConstant.appTextColor),
+    //     ),
+    //     centerTitle: true,
+    //     actions: [
+    //       GestureDetector(
+    //         onTap: () => Get.to(() => CartScreen()),
+    //         child: Padding(
+    //           padding: const EdgeInsets.all(8.0),
+    //           child: Icon(Icons.shopping_cart),
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    //   drawer: DrawerWidget(),
+      
+      
+    //   body: SingleChildScrollView(
+    //     physics: BouncingScrollPhysics(),
+    //     child: Container(
+    //         child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         SizedBox(
+    //           height: Get.height / 90.0,
+    //         ),
+    //         BannerWidet(),
+    //         HeadingWidget(
+    //           headingTitle: "Categories",
+    //           headSubTitle: "According to your budget",
+    //           onTap: () => Get.to(() => AllCategoriesScreen()),
+    //           buttonText: "See More >",
+    //         ),
+    //         CategoriesWidget(),
+    //         HeadingWidget(
+    //           headingTitle: "Flash Sale",
+    //           headSubTitle: "According to your budget",
+    //           onTap: () => Get.to(() => AllFetchSaleProductScreen()),
+    //           buttonText: "See More >",
+    //         ),
+    //         FlashSaleWidget(),
+    //         HeadingWidget(
+    //           headingTitle: "All Products",
+    //           headSubTitle: "According to your budget",
+    //           onTap: () => Get.to(() => AllProductsScreen()),
+    //           buttonText: "See More >",
+    //         ),
+    //         AllProductsWidget()
+    //       ],
+    //     )),
+    //   ),
+    // );
   }
 }
