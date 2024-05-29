@@ -40,8 +40,10 @@ class HeadingWidget extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
-                    border: Border.all(
-                        color: AppConstant.appSecondaryColor, width: 1.5), ),
+                    // border: Border.all(
+                    //     color: AppConstant.appSecondaryColor, width: 1.5), 
+                        
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(buttonText, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12.0, color: AppConstant.appSecondaryColor),),

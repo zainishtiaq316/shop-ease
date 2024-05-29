@@ -6,7 +6,9 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_card/image_card.dart';
 import 'package:shopease/models/categories-model.dart';
+import 'package:shopease/screens/user-panel/all-categories-screen.dart';
 import 'package:shopease/screens/user-panel/single-category-product-screen.dart';
+import 'package:shopease/widgets/heading-widget.dart';
 
 class CategoriesWidget extends StatefulWidget {
   const CategoriesWidget({super.key});
@@ -42,42 +44,70 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
             );
           }
           if (snapshot.data != null) {
-            return Container(
-              height: Get.height / 5.5,
-              child: ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    CategoriesModel categoriesModel = CategoriesModel(
-                        updatedAt: snapshot.data!.docs[index]['updatedAt'],
-                        createdAt: snapshot.data!.docs[index]['createdAt'],
-                        categoryId: snapshot.data!.docs[index]['categoryId'],
-                        categoryImg: snapshot.data!.docs[index]['categoryImg'],
-                        categoryName: snapshot.data!.docs[index]['categoryName']);
-                    return Row(
-                     mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                          onTap: ()=>Get.to(()=>AllSingleCategoryProductScreen(categoryId: categoriesModel.categoryId)),
-                          child: Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: Container(
-                              child: FillImageCard(
-                                borderRadius: 20.0,
-                                width: Get.width/4,
-                                heightImage: Get.height/12
-                                ,
-                                imageProvider: CachedNetworkImageProvider(categoriesModel.categoryImg),
-                                title: Center(child: Text(categoriesModel.categoryName, style: TextStyle(fontSize: 12.0),)),
-                              
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    );
-                  }),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                HeadingWidget(
+                          headingTitle: "Categories",
+                          headSubTitle: "According to your budget",
+                          onTap: () => Get.to(() => AllCategoriesScreen()),
+                          buttonText: "See all",
+                        ),
+                Container(
+                  height: Get.height / 5.5,
+                  child: ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        CategoriesModel categoriesModel = CategoriesModel(
+                            updatedAt: snapshot.data!.docs[index]['updatedAt'],
+                            createdAt: snapshot.data!.docs[index]['createdAt'],
+                            categoryId: snapshot.data!.docs[index]['categoryId'],
+                            categoryImg: snapshot.data!.docs[index]['categoryImg'],
+                            categoryName: snapshot.data!.docs[index]['categoryName']);
+                        return Row(
+                         mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            GestureDetector(
+  onTap: () => Get.to(() => AllSingleCategoryProductScreen(categoryId: categoriesModel.categoryId)),
+  child: Padding(
+    padding: EdgeInsets.all(5.0),
+    child: Padding(
+      padding: const EdgeInsets.only(left: 5),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Circular Image
+          Container(
+            width: Get.width / 4.5,
+            height: Get.width / 4.5, // Use width to ensure it's a circle
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: CachedNetworkImageProvider(categoriesModel.categoryImg),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          // Category Name
+          SizedBox(height: 8.0), // Space between image and text
+          Text(
+            categoriesModel.categoryName,
+            style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    ),
+  ),
+)
+
+                          ],
+                        );
+                      }),
+                ),
+              ],
             );
           }
 

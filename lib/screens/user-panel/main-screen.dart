@@ -37,25 +37,15 @@ class _MainScreenState extends State<MainScreen> {
               height: Get.height / 90.0,
             ),
             BannerWidet(),
-            HeadingWidget(
-              headingTitle: "Categories",
-              headSubTitle: "According to your budget",
-              onTap: () => Get.to(() => AllCategoriesScreen()),
-              buttonText: "See More >",
-            ),
+           
             CategoriesWidget(),
-            HeadingWidget(
-              headingTitle: "Flash Sale",
-              headSubTitle: "According to your budget",
-              onTap: () => Get.to(() => AllFetchSaleProductScreen()),
-              buttonText: "See More >",
-            ),
+           
             FlashSaleWidget(),
             HeadingWidget(
               headingTitle: "All Products",
               headSubTitle: "According to your budget",
               onTap: () => Get.to(() => AllProductsScreen()),
-              buttonText: "See More >",
+              buttonText: "See all",
             ),
             AllProductsWidget()
           ],
