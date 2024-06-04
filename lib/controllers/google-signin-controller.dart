@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 import 'package:shopease/screens/home_page.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
 
@@ -12,10 +13,12 @@ import 'getting-token.dart';
 class GoogleSignInController extends GetxController {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+   DateTime currentTime = DateTime.now();
 
   Future<void> signInWithGoogle() async {
     final GetDeviceTokenController getDeviceTokenController =
         Get.put(GetDeviceTokenController());
+         String formattedDateTime = DateFormat('dd/MM/yyyy - h:mma').format(currentTime);
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
@@ -56,20 +59,27 @@ class GoogleSignInController extends GetxController {
             }
           } else {
             UserModel userModel = UserModel(
+              lastName: '',
                 city: '',
+                          Gender: '',
+                           language: 'English',
+          dateOfBirth: '',
+          updatedOn: DateTime.now(),
                 country: '',
                 createdOn: DateTime.now(),
                 email: user.email.toString(),
                 isAdmin: false,
                 isActive: true,
                 phone: user.phoneNumber.toString(),
+                    joinedTime: formattedDateTime,
+          updatedTime: formattedDateTime,
                 street: '',
                 uid: user.uid,
                 userAddress: '',
                 userDeviceToken:
                     getDeviceTokenController.deviceToken.toString(),
                 userImg: user.photoURL.toString(),
-                username: user.displayName.toString());
+                firstName: user.displayName.toString());
 
             await FirebaseFirestore.instance
                 .collection('users')

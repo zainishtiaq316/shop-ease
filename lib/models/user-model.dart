@@ -1,6 +1,7 @@
-class UserModel{
+class UserModel {
   final String uid;
-  final String username;
+  final String firstName;
+  final String lastName;
   final String email;
   final String phone;
   final String userImg;
@@ -8,34 +9,84 @@ class UserModel{
   final String country;
   final String userAddress;
   final String street;
+  final String Gender;
+  final String language;
+  final String dateOfBirth;
   final bool isAdmin;
   final bool isActive;
   final String city;
   final dynamic createdOn;
-  UserModel({
-    required this.country, required this.createdOn, required this.email, required this.city, required this.isAdmin, required this.isActive, required this.phone, required this.street, required this.uid, required this.userAddress, required this.userDeviceToken, required this.userImg, required this.username
-  });
+  final dynamic updatedOn;
+  final dynamic joinedTime;
+  final dynamic updatedTime;
+  UserModel(
+      {required this.Gender,
+      required this.dateOfBirth,
+      required this.language,
+      required this.updatedOn,
+      required this.updatedTime,
+      required this.joinedTime,
+      required this.country,
+      required this.createdOn,
+      required this.email,
+      required this.city,
+      required this.isAdmin,
+      required this.isActive,
+      required this.phone,
+      required this.lastName,
+      required this.street,
+      required this.uid,
+      required this.userAddress,
+      required this.userDeviceToken,
+      required this.userImg,
+      required this.firstName});
 
-  Map<String, dynamic> toMap(){
-    return{
-     'uid' : uid,
-     'username' : username,
-     'email' : email,
-     'phone': phone,
-     'userImg' : userImg,
-     'userDeviceToken' : userDeviceToken,
-     'country': country,
-     'userAddress': userAddress,
-     'street':street,
-     'city' : city,
-     'isAdmin': isAdmin,
-     'isActive':isActive,
-     'createdOn':createdOn
+  Map<String, dynamic> toMap() {
+    return {
+      'uid': uid,
+      'firstName': firstName,
+      'lastName': lastName,
+      'email': email,
+      'phone': phone,
+      'language' :language,
+      'gender' : Gender,
+      'dateOfBirth' : dateOfBirth,
+      'userImg': userImg,
+      'joinedTime': joinedTime,
+      'userDeviceToken': userDeviceToken,
+      'country': country,
+      'userAddress': userAddress,
+      'street': street,
+      'city': city,
+      'isAdmin': isAdmin,
+      'isActive': isActive,
+      'createdOn': createdOn,
+      'updatedOn' : updatedOn,
+      'updatedTime' : updatedTime,
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> json){
-    return UserModel(country: json['uid'], createdOn: json['createdOn'],   city : json['city'],email: json['email'], isAdmin: json['isAdmin'], isActive: json['isActive'], phone: json['phone'], street: json['street'], uid: json['uid'], userAddress: json['userAddress'], userDeviceToken: json['userDeviceToken'], userImg: json['userImg'], username: json['username']);
+  factory UserModel.fromMap(Map<String, dynamic> json) {
+    return UserModel(
+        country: json['uid'],
+        createdOn: json['createdOn'],
+        city: json['city'],
+        Gender : json['gender'],
+        language : json['language'],
+        email: json['email'],
+        dateOfBirth: json['dateOfBirth'],
+        isAdmin: json['isAdmin'],
+        isActive: json['isActive'],
+        phone: json['phone'],
+        street: json['street'],
+        uid: json['uid'],
+        updatedOn:json['updatedOn'],
+        userAddress: json['userAddress'],
+        userDeviceToken: json['userDeviceToken'],
+        userImg: json['userImg'],
+        firstName: json['firstName'],
+        updatedTime : json['updatedTime'],
+        joinedTime : json['joinedTime'],
+        lastName: json['lastName']);
   }
-  
 }

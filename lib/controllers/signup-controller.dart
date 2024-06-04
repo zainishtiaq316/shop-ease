@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shopease/models/user-model.dart';
 import 'package:shopease/utils/app-constant.dart';
 
@@ -15,15 +16,19 @@ class SignUpController extends GetxController {
   //for password visibilty
   var isPasswordVisible = false.obs;
   var isConfirmPasswordVisible = false.obs;
+  DateTime currentTime = DateTime.now();
+  
   Future<UserCredential?> signUpMethod(
       String userName,
       String userEmail,
       String userPhone,
+      String secondName,
       String userCity,
       String userPassword,
       String userDeviceToken) async {
     final GetDeviceTokenController getDeviceTokenController =
         Get.put(GetDeviceTokenController());
+        String formattedDateTime = DateFormat('dd/MM/yyyy - h:mma').format(currentTime);
     try {
       EasyLoading.show(status: "Please wait a moments");
       UserCredential userCredential =
@@ -34,6 +39,13 @@ class SignUpController extends GetxController {
 
       UserModel userModel = UserModel(
           city: userCity,
+          lastName: secondName,
+          Gender: '',
+          language: 'English',
+          dateOfBirth: '',
+          updatedOn: DateTime.now(),
+          joinedTime: formattedDateTime,
+          updatedTime: formattedDateTime,
           country: '',
           createdOn: DateTime.now(),
           email: userEmail,
@@ -45,7 +57,7 @@ class SignUpController extends GetxController {
           userAddress: '',
           userDeviceToken: getDeviceTokenController.deviceToken.toString(),
           userImg: '',
-          username: userName);
+          firstName: userName);
       _firestore
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -61,4 +73,5 @@ class SignUpController extends GetxController {
           colorText: AppConstant.appTextColor);
     }
   }
+  
 }
