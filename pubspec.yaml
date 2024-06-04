@@ -30,6 +30,7 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   app_settings: ^5.1.1
+  awesome_dialog: ^3.2.1
   cached_network_image: ^3.3.1
   carousel_slider: ^4.2.1
   cloud_firestore: ^4.14.0

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shopease/screens/Profile/edit-profile.dart';
+import 'package:shopease/screens/Profile/my-account.dart';
 import 'package:shopease/utils/app-constant.dart';
+
+import 'change-password.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -119,28 +122,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                            Padding(
                               padding: const EdgeInsets.only( left: 20, right: 20, bottom: 20),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height*0.09,
-                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
-
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-                                  child: buttons("assets/images/account.png", "My Account", Colors.blue, Colors.blue.shade100)
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountInfo()));
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height*0.09,
+                                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+                                
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                                    child: buttons("assets/images/account.png", "My Account", Colors.blue, Colors.blue.shade100)
+                                  ),
                                 ),
                               ),
                             )
                          
                         ,   Padding(
                               padding: const EdgeInsets.only( left: 20, right: 20, bottom: 20),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height*0.09,
-                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
-
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
-                                  child: buttons("assets/images/lock.png", "Change Password", Colors.pink, Colors.grey.shade200)
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePasswordScreen()));
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height*0.09,
+                                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+                                
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 20, right: 20, top: 15, bottom: 15),
+                                    child: buttons("assets/images/lock.png", "Change Password", Colors.pink, Colors.grey.shade200)
+                                  ),
                                 ),
                               ),
                             )
