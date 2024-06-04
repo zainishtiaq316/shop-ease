@@ -10,4 +10,7 @@ class AppConstant {
   static const appSecondaryColor = Color(0xFF981206);
   static const appTextColor = Color(0xFFFBF5F4);
   static const appStatusBarColor = Color(0xFFFBF5F4);
+ 
 }
+
+ Color  appColor = Colors.purple.shade600;

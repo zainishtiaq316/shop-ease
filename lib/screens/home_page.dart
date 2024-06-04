@@ -9,6 +9,7 @@ import 'package:shopease/screens/user-panel/main-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 import 'package:shopease/widgets/custom-drawer-widget.dart';
 
+import 'Profile/profile-screen.dart';
 import 'user-panel/cart-screen.dart';
 
 class HomePageView extends StatefulWidget {
@@ -68,29 +69,28 @@ class _HomePageViewState extends State<HomePageView> {
         'Search',
         style: optionStyle,
       ),
-      Text(
-        'Profile',
-        style: optionStyle,
-      ),
+      ProfileScreen(),
     ];
 
     return WillPopScope(
         onWillPop: onWillPop,
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.grey.shade100,
+          
           drawer: DrawerWidget(),
           appBar: AppBar(
+            surfaceTintColor: appColor,
              iconTheme: IconThemeData(color: AppConstant.appTextColor),
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: AppConstant.appSecondaryColor,
+            statusBarColor:  appColor,
             statusBarIconBrightness: Brightness.light),
-        backgroundColor: AppConstant.appMainColor,
+        backgroundColor: appColor,
           centerTitle: true,
             title: Text(
               _selectedIndex == 0
                   ? '${ AppConstant.appMainName}'
                   : _selectedIndex == 1
-                      ? 'Likes'
+                      ? 'Favourites'
                       : _selectedIndex == 2
                           ? 'Search'
                           : 'Profile',
@@ -113,9 +113,10 @@ class _HomePageViewState extends State<HomePageView> {
             child: _widgetOptions.elementAt(_selectedIndex),
           ),
           bottomNavigationBar: Container(
+            
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.purple, Colors.pink],
+                colors: [appColor, appColor],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),

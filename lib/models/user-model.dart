@@ -13,8 +13,7 @@ class UserModel{
   final String city;
   final dynamic createdOn;
   UserModel({
-    required this.country,
-    required this.createdOn, required this.email, required this.city, required this.isAdmin, required this.isActive, required this.phone, required this.street, required this.uid, required this.userAddress, required this.userDeviceToken, required this.userImg, required this.username
+    required this.country, required this.createdOn, required this.email, required this.city, required this.isAdmin, required this.isActive, required this.phone, required this.street, required this.uid, required this.userAddress, required this.userDeviceToken, required this.userImg, required this.username
   });
 
   Map<String, dynamic> toMap(){
