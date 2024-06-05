@@ -108,9 +108,19 @@ class _AccountInfoState extends State<AccountInfo> {
               } else {
                 Map<String, dynamic>? userData = snapshot.data?.data();
                 String? firstName = userData?['firstName'];
-                String? SecondName = userData?['secondName'];
+                String? SecondName = userData?['lastName'];
                 String? email = userData?['email'];
-                String? phone = userData?['phoneNumber'];
+                String? phone = userData?['phone'];
+                String? address = userData?['userAddress'];
+                String? street = userData?['street'];
+                String? gender = userData?['gender'];
+                String? language = userData?['language'];
+                String? dateOfBirth = userData?['dateOfBirth'];
+                String? joinedData = userData?['joinedTime'];
+                String? updateData = userData?['updatedTime'];
+                String? country = userData?['country'];
+                String? city = userData?['city'];
+
                 print("${user!.uid}");
 
                 return SingleChildScrollView(
@@ -158,16 +168,18 @@ class _AccountInfoState extends State<AccountInfo> {
                                   color: Colors.white,
                                   thickness: 2,
                                 ),
-                                info("UserName", "$firstName $SecondName"),
-                                info("Email", "$email"),
-                                info("Phone", "$phone"),
-                                  info("Address", "$firstName $SecondName"),
-                                info("Street", "$email"),
-                                info("Gender", "$phone"),
-                                  info("Language", "$firstName $SecondName"),
-                                info("Date of Birth", "$phone"),
-                                info("Joined Date", "$phone"),
-                                info("Updated Date", "$phone"),
+                                info("UserName", "${firstName??""}${SecondName??""}"),
+                                info("Email", "${email??""}"),
+                                info("Phone", "${phone??""}"),
+                                  info("Address", "${address??""}"),
+                                info("Street", "${street??""}"),
+                                info("Country", "${country??""}"),
+                                info("City", "${city??""}"),
+                                info("Gender", "${gender??""}"),
+                                  info("Language", "${language??""}"),
+                                info("Date of Birth", "${dateOfBirth??""}"),
+                                info("Joined Date", "${joinedData??""}"),
+                                info("Updated Date", "${updateData??""}"),
                                 SizedBox(
                                   height: 15,
                                 ),
@@ -270,13 +282,13 @@ class _AccountInfoState extends State<AccountInfo> {
       child: Row(
         children: [
           Text(
-            "${name ?? ""} : ",
+            "${name} : ",
             style: TextStyle(
                 color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
           ),
           Spacer(),
           Text(
-            "${value ?? ""}",
+            "${value}",
             style: TextStyle(
               color: Colors.black,
               fontSize: 15,

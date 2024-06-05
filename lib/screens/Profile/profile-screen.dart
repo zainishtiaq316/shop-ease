@@ -40,6 +40,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             String? firstName = userData?['firstName'];
             String? SecondName = userData?['lastName'];
             String? email = userData?['email'];
+            String? dateOfBirth = userData?['dateOfBirth'];
+            String? gender = userData?['gender'];
+            String? phone = userData?['phone'];
 
             return SingleChildScrollView(
               child: Container(
@@ -143,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: Column(
                                     children: [
                                       personalDetail("Email",
-                                          "zainishtiaq,7866@gmail.com"),
+                                          "${email??""}"),
                                       SizedBox(
                                         height: 5,
                                       ),
@@ -154,8 +157,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       SizedBox(
                                         height: 5,
                                       ),
+                                      // 24-06-2001
                                       personalDetail(
-                                          "Date of Birth", "24-06-2001"),
+                                          "Date of Birth", "${dateOfBirth??""}"),
                                       SizedBox(
                                         height: 5,
                                       ),
@@ -166,7 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       SizedBox(
                                         height: 5,
                                       ),
-                                      personalDetail("Gender", "Male"),
+                                      personalDetail("Gender", "${gender??""}"),
                                       SizedBox(
                                         height: 5,
                                       ),
@@ -177,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       SizedBox(
                                         height: 5,
                                       ),
-                                      personalDetail("Phone", "+923028163676"),
+                                      personalDetail("Phone", "${phone??""}"),
                                     ],
                                   ),
                                 ),
