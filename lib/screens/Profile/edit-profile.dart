@@ -7,8 +7,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:shopease/controllers/update-profile-controller.dart';
 import 'package:shopease/models/user-model.dart';
 import 'package:shopease/screens/Profile/uploader.dart';
 import 'package:shopease/screens/home_page.dart';
@@ -67,13 +70,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       streetTextEditingController.text = userData['street'];
       cityTextEditingController.text = userData['city'];
 
-      // Set selected gender if available
-      if (userData['gender'] != null) {
-        selectedGender = userData['gender'];
-      }
+     
     });
   }
-  
 
   @override
   void initState() {
@@ -102,20 +101,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   static final Map<String, String> genderMap = {
-    'male': 'Male',
-    'female': 'Female',
-    'other': 'Other',
+    'Male': 'Male',
+    'Female': 'Female',
+    'Other': 'Other',
   };
 
   String _selectedGender = genderMap.keys.first;
   void onGenderSelected(String genderKey) {
     setState(() {
       _selectedGender = genderKey;
+      genderEditingController.text = _selectedGender;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    UpdateProfileController updateProfileController =
+        Get.put(UpdateProfileController());
     //first name field
     final firstNameField = TextFormField(
       autofocus: false,
@@ -361,41 +363,58 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
 
     //country
-  final countryField = DropdownButtonFormField<String>(
-  value: selectedCountry, // Default value
-  onChanged: (String? newValue) {
-    setState(() { // Ensure this is within a Stateful widget and call setState to update the UI
-      selectedCountry = newValue!; // Update the selected country
-    });
-  },
-  items: <String>['Pakistan'].map<DropdownMenuItem<String>>((String value) {
-    return DropdownMenuItem<String>(
-      value: value,
-      child: Text(value),
+    final countryField = DropdownButtonFormField<String>(
+      value: selectedCountry, // Default value
+      onChanged: (String? newValue) {
+        setState(() {
+          // Ensure this is within a Stateful widget and call setState to update the UI
+          selectedCountry = newValue!; // Update the selected country
+          countryTextEditingController.text = selectedCountry;
+        });
+      },
+      items: <String>['Pakistan'].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Country",
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        hintStyle: TextStyle(color: Colors.grey.withOpacity(0.9)),
+        border: InputBorder.none,
+        fillColor: Color(0xfff3f3f4),
+        filled: true,
+      ),
     );
-  }).toList(),
-  decoration: InputDecoration(
-    contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-    hintText: "Country",
-    floatingLabelBehavior: FloatingLabelBehavior.never,
-    hintStyle: TextStyle(color: Colors.grey.withOpacity(0.9)),
-    border: InputBorder.none,
-    fillColor: Color(0xfff3f3f4),
-    filled: true,
-  ),
-);
     //signup button
     final update = GestureDetector(
       onTap: () async {
-        print("${firstNameEditingController.text}");
-         print("${lastNameEditingController.text}");
+        if (_formKey.currentState!.validate()) {
+          print("${firstNameEditingController.text}");
+          print("${lastNameEditingController.text}");
           print("${emailEditingController.text}");
-           print("${phoneNumberEditingController.text}");
-            print("${dateOfBirthEditingController.text}");
-             print("${countryTextEditingController.text}");
-              print("${cityTextEditingController.text}");
-               print("${streetTextEditingController.text}");
-                print("${_selectedGender}");
+          print("${phoneNumberEditingController.text}");
+          print("${dateOfBirthEditingController.text}");
+          print("${countryTextEditingController.text}");
+          print("${cityTextEditingController.text}");
+          print("${streetTextEditingController.text}");
+          print("${ genderEditingController.text}");
+        await  updateProfileController.updateProfileMethod(
+             
+              firstNameEditingController.text.trim(),
+              lastNameEditingController.text.trim(),
+              emailEditingController.text.trim(),
+              phoneNumberEditingController.text.trim(),
+              dateOfBirthEditingController.text.trim(),
+              countryTextEditingController.text.trim(),
+              cityTextEditingController.text.trim(),
+              streetTextEditingController.text.trim(),
+              genderEditingController.text.trim());
+        
+        
+        }
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -614,7 +633,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         height: 10,
                       ),
                       CupertinoRadioChoice(
-                        selectedColor: appColor,
+                          selectedColor: appColor,
                           choices: genderMap,
                           onChange: onGenderSelected,
                           initialKeyValue: _selectedGender),
@@ -743,58 +762,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         );
       },
-    );
-  }
-
-  Widget genderRadioButtons() {
-    return Row(
-      children: [
-        Expanded(
-          child: ListTile(
-            title: const Text('Male'),
-            leading: Radio<String>(
-              value: 'Male',
-              groupValue: selectedGender,
-              activeColor: appColor, // Change to desired color
-              onChanged: (String? value) {
-                setState(() {
-                  selectedGender = value;
-                });
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListTile(
-            title: const Text('Female'),
-            leading: Radio<String>(
-              value: 'Female',
-              groupValue: selectedGender,
-              activeColor: appColor, // Change to desired color
-              onChanged: (String? value) {
-                setState(() {
-                  selectedGender = value;
-                });
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListTile(
-            title: const Text('Other'),
-            leading: Radio<String>(
-              value: 'Other',
-              groupValue: selectedGender,
-              activeColor: appColor, // Change to desired color
-              onChanged: (String? value) {
-                setState(() {
-                  selectedGender = value;
-                });
-              },
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
