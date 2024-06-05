@@ -7,16 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:shopease/models/user-model.dart';
 import 'package:shopease/screens/Profile/uploader.dart';
 import 'package:shopease/screens/home_page.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 import 'image-picker.dart';
+
 final profileIcon =
     "https://warranty.aquaoasis.com/images/icons/profile-icon.png";
-
-
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -28,47 +28,79 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   User? user = FirebaseAuth.instance.currentUser;
 
-   final _formKey = GlobalKey<FormState>();
-    //editing controller
-    final firstNameEditingController = new TextEditingController();
-    final lastNameEditingController = new TextEditingController();
-    final emailEditingController = new TextEditingController();
-    final phoneNumberEditingController = new TextEditingController();
-    final dateOfBirthEditingController = new TextEditingController();
-    String? firstName;
-  String? lastName;
-  String? email;
-  String? phoneNumber;
-  String? rollNo;
+  final _formKey = GlobalKey<FormState>();
+  //editing controller
+  final firstNameEditingController = new TextEditingController();
+  final lastNameEditingController = new TextEditingController();
+  final emailEditingController = new TextEditingController();
+  final phoneNumberEditingController = new TextEditingController();
+  final languageEditingController = new TextEditingController();
+  final genderEditingController = new TextEditingController();
+  final dateOfBirthEditingController = new TextEditingController();
+  final countryTextEditingController = new TextEditingController();
+  final addressTextEditingController = new TextEditingController();
+  final streetTextEditingController = new TextEditingController();
+  final cityTextEditingController = new TextEditingController();
+  String? selectedGender;
+
 
   // Fetch user data from Firestore
-  Future<void> fetchUserData() async {
-    DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+ Future<void> fetchUserData() async {
+  DocumentSnapshot<Map<String, dynamic>> userData = await FirebaseFirestore
+      .instance
+      .collection("users")
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .get();
 
-    // Extract user data
-    setState(() {
-      firstNameEditingController.text = userData['firstName'];
-      lastNameEditingController.text = userData['secondName'];
-      emailEditingController.text = userData['email'];
-      phoneNumberEditingController.text = userData['phoneNumber'];
-      dateOfBirthEditingController.text = userData['rollNo'];
-    });
-  }
+  // Extract user data
+  setState(() {
+    firstNameEditingController.text = userData['firstName'];
+    lastNameEditingController.text = userData['lastName'];
+    emailEditingController.text = userData['email'];
+    phoneNumberEditingController.text = userData['phone'];
+    languageEditingController.text = userData['language'];
+    genderEditingController.text = userData['gender'];
+    dateOfBirthEditingController.text = userData['dateOfBirth'];
+    countryTextEditingController.text = userData['country'];
+    addressTextEditingController.text = userData['userAddress'];
+    streetTextEditingController.text = userData['street'];
+    cityTextEditingController.text = userData['city'];
+    
+    // Set selected gender if available
+    if (userData['gender'] != null) {
+      selectedGender = userData['gender'];
+    }
+  });
+}
+
   @override
   void initState() {
     super.initState();
     // Call fetchUserData when the widget initializes
     fetchUserData();
   }
+
   File? pickImage;
   final _imgPicker = MyImagePicker();
   final UploaderService uploaderService = UploaderService();
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2101),
+    );
+
+    if (picked != null) {
+      setState(() {
+        dateOfBirthEditingController.text =
+            DateFormat('dd-MM-yyyy').format(picked);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-   
     //first name field
     final firstNameField = TextFormField(
       autofocus: false,
@@ -209,45 +241,137 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           fillColor: Color(0xfff3f3f4),
           filled: true),
     );
-    //first name field
-    final dateOfBirth = TextFormField(
+
+    //DOB field
+    final dateOfBirthField = TextFormField(
       autofocus: false,
       obscureText: false,
       enableSuggestions: true,
       autocorrect: true,
-      enabled: false,
+      enabled:
+          true, // Make the field editable so that the user can tap to select date
       controller: dateOfBirthEditingController,
       cursorColor: Colors.black45,
       style: TextStyle(color: Colors.black45.withOpacity(0.9)),
-      keyboardType: TextInputType.name,
+      readOnly:
+          true, // Make the field read-only so the keyboard does not show up
+      onTap: () => _selectDate(context), // Show date picker on tap
       validator: (value) {
-        RegExp regex = new RegExp(r'^.{3,}$');
-        if (value!.isEmpty) {
-          return ("Roll No can't be Empty");
+        if (value == null || value.isEmpty) {
+          return ("Date of Birth can't be Empty");
         }
-        if (!regex.hasMatch(value)) {
-          return ("Enter Valid Roll No");
+        // Check if the date matches the format DD-MM-YYYY
+        if (!RegExp(r'^\d{2}-\d{2}-\d{4}$').hasMatch(value)) {
+          return ("Enter Valid Date of Birth in DD-MM-YYYY format");
         }
         return null;
       },
       onSaved: (value) {
-        //new
         dateOfBirthEditingController.text = value!;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Roll No",
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          hintStyle: TextStyle(color: Colors.grey.withOpacity(0.9)),
-          border: InputBorder.none,
-          fillColor: Color(0xfff3f3f4),
-          filled: true),
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Date of Birth",
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        hintStyle: TextStyle(color: Colors.grey.withOpacity(0.9)),
+        border: InputBorder.none,
+        fillColor: Color(0xfff3f3f4),
+        filled: true,
+      ),
     );
+
+    //Street
+    final streetField = TextFormField(
+      autofocus: false,
+      obscureText: false,
+      enableSuggestions: true,
+      autocorrect: true,
+      enabled: true, // Make the field editable
+      controller: streetTextEditingController,
+      cursorColor: Colors.black45,
+      style: TextStyle(color: Colors.black45.withOpacity(0.9)),
+
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return ("Street can't be empty");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        streetTextEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Street",
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        hintStyle: TextStyle(color: Colors.grey.withOpacity(0.9)),
+        border: InputBorder.none,
+        fillColor: Color(0xfff3f3f4),
+        filled: true,
+      ),
+    );
+
+    //City
+    final cityField = TextFormField(
+      autofocus: false,
+      obscureText: false,
+      enableSuggestions: true,
+      autocorrect: true,
+      enabled: true, // Make the field editable
+      controller: cityTextEditingController,
+      cursorColor: Colors.black45,
+      style: TextStyle(color: Colors.black45.withOpacity(0.9)),
+
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return ("City can't be empty");
+        }
+        return null;
+      },
+      onSaved: (value) {
+        cityTextEditingController.text = value!;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "City",
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        hintStyle: TextStyle(color: Colors.grey.withOpacity(0.9)),
+        border: InputBorder.none,
+        fillColor: Color(0xfff3f3f4),
+        filled: true,
+      ),
+    );
+
+    //country
+    final countryField = DropdownButtonFormField<String>(
+      value: "Pakistan", // Default value
+      onChanged: (String? newValue) {
+        countryTextEditingController.text = newValue!;
+      },
+      items: <String>['Pakistan'].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Country",
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        hintStyle: TextStyle(color: Colors.grey.withOpacity(0.9)),
+        border: InputBorder.none,
+        fillColor: Color(0xfff3f3f4),
+        filled: true,
+      ),
+    );
+  
     //signup button
     final update = GestureDetector(
       onTap: () async {
-     
+        print("${firstNameEditingController.text}");
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
@@ -262,7 +386,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   blurRadius: 5,
                   spreadRadius: 2)
             ],
-           color: appColor),
+            color: appColor),
         child: Text(
           "Update",
           textAlign: TextAlign.center,
@@ -273,171 +397,209 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-                backgroundColor: appColor,
-                surfaceTintColor: appColor,
-                elevation: 0,
-                centerTitle: true,
-                title: const Text(
-                  "Edit Profile",
-                  style: TextStyle(color: Colors.white),
-                ),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios, color: Colors.white),
-                  onPressed: () {
-                    //passing this to a route
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-      body: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Stack(
-                            children: [
-                              Container(
-                                  width: MediaQuery.of(context).size.width * 0.44,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.2,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        width: 2,
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          spreadRadius: 2,
-                                          blurRadius: 10,
-                                          color: Colors.black.withOpacity(0.1),
-                                          offset: Offset(0, 10))
-                                    ],
-                                    shape: BoxShape.circle,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: appColor,
+          surfaceTintColor: appColor,
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            "Edit Profile",
+            style: TextStyle(color: Colors.white),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            onPressed: () {
+              //passing this to a route
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Stack(
+                      children: [
+                        Container(
+                            width: MediaQuery.of(context).size.width * 0.44,
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                  width: 2,
+                                  color: Theme.of(context)
+                                      .scaffoldBackgroundColor),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    color: Colors.black.withOpacity(0.1),
+                                    offset: Offset(0, 10))
+                              ],
+                              shape: BoxShape.circle,
+                            ),
+                            child: pickImage == null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: CachedNetworkImage(
+                                      errorWidget: (context, url, error) {
+                                        return Image.asset(
+                                          "assets/images/user.png",
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                      fit: BoxFit.cover,
+                                      imageUrl:
+                                          "${user?.photoURL != null ? user?.photoURL : profileIcon}",
+                                    ),
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(500),
+                                    child: Image.file(
+                                      pickImage!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
+                        Positioned(
+                            bottom: 10,
+                            right: 5,
+                            child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 4,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
                                   ),
-                                  child: pickImage == null
-                                      ? ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          child: CachedNetworkImage(
-                                            errorWidget: (context, url, error) {
-                                              return Image.asset(
-                                                "assets/images/user.png",
-                                                fit: BoxFit.cover,
-                                              );
-                                            },
-                                            fit: BoxFit.cover,
-                                            imageUrl:
-                                                "${user?.photoURL != null ? user?.photoURL : profileIcon}",
-                                          ),
-                                        )
-                                      : ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(500),
-                                          child: Image.file(
-                                            pickImage!,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )),
-                              Positioned(
-                                  bottom: 10,
-                                  right: 5,
-                                  child: Container(
-                                      height: 40,
-                                      width: 40,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          width: 4,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                        ),
-                                        color: Colors.white,
-                                      ),
-                                      child: Center(
-                                        child: GestureDetector(
-                                            onTap: () async {
-                                              _showImageSourceModal();
-                                            },
-                                            child: Icon(Icons.camera_alt,
-                                                color: Colors.black)),
-                                      ))),
-                            ],
-                          ),
-                        ),
+                                  color: Colors.white,
+                                ),
+                                child: Center(
+                                  child: GestureDetector(
+                                      onTap: () async {
+                                        _showImageSourceModal();
+                                      },
+                                      child: Icon(Icons.camera_alt,
+                                          color: Colors.black)),
+                                ))),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "First name",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "First name",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            firstNameField,
-                            SizedBox(height: 10),
-                            Text(
-                              "Last name",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            lastNameField,
-                            SizedBox(height: 10),
-                            Text(
-                              "Email",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            emailField,
-                            SizedBox(height: 10),
-                            Text(
-                              "Phone number",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            phoneNumberField,
-                            SizedBox(height: 10),
-                            Text(
-                              "Roll No",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            dateOfBirth,
-                            SizedBox(height: 20),
-                            update,
-                            SizedBox(height: 15),
-                          ],
-                        ),
+                      SizedBox(
+                        height: 10,
                       ),
+                      firstNameField,
+                      SizedBox(height: 10),
+                      Text(
+                        "Last name",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      lastNameField,
+                      SizedBox(height: 10),
+                      Text(
+                        "Email",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      emailField,
+                      SizedBox(height: 10),
+                      Text(
+                        "Phone number",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      phoneNumberField,
+                      SizedBox(height: 10),
+                      Text(
+                        "Date of Birth",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      dateOfBirthField,
+                      SizedBox(height: 10),
+                       Text(
+                        "Country",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      countryField,
+                      SizedBox(height: 10),
+                       Text(
+                        "City",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      cityField,
+                      SizedBox(height: 10),
+                       Text(
+                        "Street",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      streetField,
+                       SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Gender",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      genderRadioButtons(),
+                      SizedBox(height: 20),
+                      update,
+                      SizedBox(height: 15),
                     ],
                   ),
                 ),
-              )
-    );
+              ],
+            ),
+          ),
+        ));
   }
 
   void _showImageSourceModal() {
@@ -459,42 +621,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       pickImage = file;
                     });
                   }
-                   if (pickImage != null) {
-           CircularProgressIndicator();
-            final image = await uploaderService.uploadFile(
-                pickImage!, "Profile_Images", FileType.Image);
+                  if (pickImage != null) {
+                    CircularProgressIndicator();
+                    final image = await uploaderService.uploadFile(
+                        pickImage!, "Profile_Images", FileType.Image);
 
-            // await FirebaseDatabase.instance
-            //     .ref("Users")
-            //     .child(FirebaseAuth.instance.currentUser!.uid)
-            //     .update({"photoURL": image.downloadLink});
-            await FirebaseFirestore.instance
-                .collection("users")
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .update({
-              "photoURL": image.downloadLink,
-            
-              // "firstName": firstNameEditingController.text.trim(),
-              // "secondName": lastNameEditingController.text.trim(),
-              // "phoneNumber": phoneNumberEditingController.text.trim(),
-          
-            }).catchError((e){
-               Fluttertoast.showToast(msg: e!.message);
-            });
+                    // await FirebaseDatabase.instance
+                    //     .ref("Users")
+                    //     .child(FirebaseAuth.instance.currentUser!.uid)
+                    //     .update({"photoURL": image.downloadLink});
+                    await FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .update({
+                      "photoURL": image.downloadLink,
 
-            await FirebaseAuth.instance.currentUser!
-                .updatePhotoURL(image.downloadLink)
-                .whenComplete(() {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EditProfileScreen()));
+                      // "firstName": firstNameEditingController.text.trim(),
+                      // "secondName": lastNameEditingController.text.trim(),
+                      // "phoneNumber": phoneNumberEditingController.text.trim(),
+                    }).catchError((e) {
+                      Fluttertoast.showToast(msg: e!.message);
+                    });
 
-              Fluttertoast.showToast(msg: "Profile Updated");
+                    await FirebaseAuth.instance.currentUser!
+                        .updatePhotoURL(image.downloadLink)
+                        .whenComplete(() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditProfileScreen()));
 
-              setState(() {
-                pickImage = null;
-              });
-            });
-                   }
+                      Fluttertoast.showToast(msg: "Profile Updated");
+
+                      setState(() {
+                        pickImage = null;
+                      });
+                    });
+                  }
                 },
               ),
               ListTile(
@@ -509,42 +672,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       pickImage = file;
                     });
                   }
-                   if (pickImage != null) {
-            CircularProgressIndicator();
-            final image = await uploaderService.uploadFile(
-                pickImage!, "Profile_Images", FileType.Image);
+                  if (pickImage != null) {
+                    CircularProgressIndicator();
+                    final image = await uploaderService.uploadFile(
+                        pickImage!, "Profile_Images", FileType.Image);
 
-            // await FirebaseDatabase.instance
-            //     .ref("Users")
-            //     .child(FirebaseAuth.instance.currentUser!.uid)
-            //     .update({"photoURL": image.downloadLink});
-            await FirebaseFirestore.instance
-                .collection("users")
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .update({
-              "photoURL": image.downloadLink,
-            
-              // "firstName": firstNameEditingController.text.trim(),
-              // "secondName": lastNameEditingController.text.trim(),
-              // "phoneNumber": phoneNumberEditingController.text.trim(),
-          
-            }).catchError((e){
-               Fluttertoast.showToast(msg: e!.message);
-            });
+                    // await FirebaseDatabase.instance
+                    //     .ref("Users")
+                    //     .child(FirebaseAuth.instance.currentUser!.uid)
+                    //     .update({"photoURL": image.downloadLink});
+                    await FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(FirebaseAuth.instance.currentUser!.uid)
+                        .update({
+                      "photoURL": image.downloadLink,
 
-            await FirebaseAuth.instance.currentUser!
-                .updatePhotoURL(image.downloadLink)
-                .whenComplete(() {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomePageView()));
+                      // "firstName": firstNameEditingController.text.trim(),
+                      // "secondName": lastNameEditingController.text.trim(),
+                      // "phoneNumber": phoneNumberEditingController.text.trim(),
+                    }).catchError((e) {
+                      Fluttertoast.showToast(msg: e!.message);
+                    });
 
-              Fluttertoast.showToast(msg: "Profile Updated");
+                    await FirebaseAuth.instance.currentUser!
+                        .updatePhotoURL(image.downloadLink)
+                        .whenComplete(() {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePageView()));
 
-              setState(() {
-                pickImage = null;
-              });
-            });
-                   }
+                      Fluttertoast.showToast(msg: "Profile Updated");
+
+                      setState(() {
+                        pickImage = null;
+                      });
+                    });
+                  }
                 },
               ),
             ],
@@ -553,6 +717,57 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       },
     );
   }
-
+ Widget genderRadioButtons() {
+  return Row(
+   
+    children: [
+      Expanded(
+        child: ListTile(
+          title: const Text('Male'),
+          leading: Radio<String>(
+            value: 'Male',
+            groupValue: selectedGender,
+            activeColor: appColor, // Change to desired color
+            onChanged: (String? value) {
+              setState(() {
+                selectedGender = value;
+              });
+            },
+          ),
+        ),
+      ),
+      Expanded(
+        child: ListTile(
+          title: const Text('Female'),
+          leading: Radio<String>(
+            value: 'Female',
+            groupValue: selectedGender,
+            activeColor: appColor, // Change to desired color
+            onChanged: (String? value) {
+              setState(() {
+                selectedGender = value;
+              });
+            },
+          ),
+        ),
+      ),
+      Expanded(
+        child: ListTile(
+          title: const Text('Other'),
+          leading: Radio<String>(
+            value: 'Other',
+            groupValue: selectedGender,
+            activeColor: appColor, // Change to desired color
+            onChanged: (String? value) {
+              setState(() {
+                selectedGender = value;
+              });
+            },
+          ),
+        ),
+      ),
+    ],
+  );
+}
 
 }
