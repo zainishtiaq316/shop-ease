@@ -8,10 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:shopease/controllers/favourite-controller.dart';
 import 'package:shopease/models/cart-model.dart';
 import 'package:shopease/models/product-model.dart';
 import 'package:shopease/screens/user-panel/cart-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
+import 'package:shopease/widgets/favourite-button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -24,25 +26,23 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   User? user = FirebaseAuth.instance.currentUser;
+  final FavoriteController _favoriteController = Get.put(FavoriteController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppConstant.appMainColor,
         title: Text("Product Details"),
-           actions: [
-          
-          
+        actions: [
           GestureDetector(
-            onTap: ()=> Get.to(()=>CartScreen()),
+            onTap: () => Get.to(() => CartScreen()),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(Icons.shopping_cart),
             ),
-          )],
-     
-     
-     
+          )
+        ],
       ),
       body: Container(
         child: Column(
@@ -88,14 +88,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                          alignment: Alignment.topLeft,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(widget.productModel.productName),
-                              Icon(Icons.favorite_outline)
-                            ],
-                          )),
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(widget.productModel.productName),
+                            ItemFavoriteButton(model: widget.productModel),
+                          ],
+                        ),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -139,7 +140,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     borderRadius: BorderRadius.circular(20.0)),
                                 child: TextButton(
                                   onPressed: () {
-                                  sendMessageOnWhatsApp(productModel : widget.productModel);
+                                    sendMessageOnWhatsApp(
+                                        productModel: widget.productModel);
                                   },
                                   child: Text(
                                     "WhatsApp",
@@ -186,25 +188,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-
-   static Future<void> sendMessageOnWhatsApp({required ProductModel productModel})async{
-
-
+  static Future<void> sendMessageOnWhatsApp(
+      {required ProductModel productModel}) async {
     final number = "+923028163676";
-    final message = "Hello Shop-ease \n i want to know about this product \n ${productModel.productName} \n${productModel.productId}";
+    final message =
+        "Hello Shop-ease \n i want to know about this product \n ${productModel.productName} \n${productModel.productId}";
 
     final url = 'https://wa.me/$number?text=${Uri.encodeComponent(message)}';
 
     // ignore: deprecated_member_use
-    if(await canLaunch(url)){
-      
+    if (await canLaunch(url)) {
       // ignore: deprecated_member_use
       await launch(url);
-    }else{
-
+    } else {
       throw 'Could not launch $url';
     }
-   }
+  }
   //checkl product exist or not
 
   Future<void> checkProductExistence(
@@ -221,13 +220,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       int currentQuantity = snapshot['productQuantity'];
 
       int updatedQuantity = currentQuantity + quantityIncreament;
-      double totalPrice =
-          double.parse(widget.productModel.isSale ? widget.productModel.salePrice : widget.productModel.fullPrice) * updatedQuantity;
+      double totalPrice = double.parse(widget.productModel.isSale
+              ? widget.productModel.salePrice
+              : widget.productModel.fullPrice) *
+          updatedQuantity;
       await documentReference.update({
         'productQuantity': updatedQuantity,
         'productTotalPrice': totalPrice
       });
-         print("product exists");
+      print("product exists");
     } else {
       await FirebaseFirestore.instance.collection('cart').doc(uId).set({
         'uId': uId,
@@ -246,14 +247,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           productImages: widget.productModel.productImages,
           productName: widget.productModel.productName,
           productQuantity: 1,
-          productTotalPrice: double.parse(widget.productModel.isSale ? widget.productModel.salePrice : widget.productModel.fullPrice),
+          productTotalPrice: double.parse(widget.productModel.isSale
+              ? widget.productModel.salePrice
+              : widget.productModel.fullPrice),
           salePrice: widget.productModel.salePrice,
           updatedAt: DateTime.now());
 
-
-      await documentReference.set(cartModel.toMap()
-      
-      );
+      await documentReference.set(cartModel.toMap());
 
       print("product added");
     }

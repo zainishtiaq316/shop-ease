@@ -48,11 +48,11 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HeadingWidget(
-                          headingTitle: "Categories",
-                          headSubTitle: "According to your budget",
-                          onTap: () => Get.to(() => AllCategoriesScreen()),
-                          buttonText: "See all",
-                        ),
+                  headingTitle: "Categories",
+                  headSubTitle: "According to your budget",
+                  onTap: () => Get.to(() => AllCategoriesScreen()),
+                  buttonText: "See all",
+                ),
                 Container(
                   height: Get.height / 5.5,
                   child: ListView.builder(
@@ -63,46 +63,56 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
                         CategoriesModel categoriesModel = CategoriesModel(
                             updatedAt: snapshot.data!.docs[index]['updatedAt'],
                             createdAt: snapshot.data!.docs[index]['createdAt'],
-                            categoryId: snapshot.data!.docs[index]['categoryId'],
-                            categoryImg: snapshot.data!.docs[index]['categoryImg'],
-                            categoryName: snapshot.data!.docs[index]['categoryName']);
+                            categoryId: snapshot.data!.docs[index]
+                                ['categoryId'],
+                            categoryImg: snapshot.data!.docs[index]
+                                ['categoryImg'],
+                            categoryName: snapshot.data!.docs[index]
+                                ['categoryName']);
                         return Row(
-                         mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
-  onTap: () => Get.to(() => AllSingleCategoryProductScreen(categoryId: categoriesModel.categoryId)),
-  child: Padding(
-    padding: EdgeInsets.all(5.0),
-    child: Padding(
-      padding: const EdgeInsets.only(left: 5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Circular Image
-          Container(
-            width: Get.width / 4.5,
-            height: Get.width / 4.5, // Use width to ensure it's a circle
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(categoriesModel.categoryImg),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          // Category Name
-          SizedBox(height: 8.0), // Space between image and text
-          Text(
-            categoriesModel.categoryName,
-            style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    ),
-  ),
-)
-
+                              onTap: () => Get.to(() =>
+                                  AllSingleCategoryProductScreen(
+                                      categoryId: categoriesModel.categoryId)),
+                              child: Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      // Circular Image
+                                      Container(
+                                        width: Get.width / 4.5,
+                                        height: Get.width /
+                                            4.5, // Use width to ensure it's a circle
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                                categoriesModel.categoryImg),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      // Category Name
+                                      SizedBox(
+                                          height:
+                                              8.0), // Space between image and text
+                                      Text(
+                                        categoriesModel.categoryName,
+                                        style: TextStyle(
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
                           ],
                         );
                       }),

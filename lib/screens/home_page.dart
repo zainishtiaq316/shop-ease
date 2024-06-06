@@ -62,7 +62,7 @@ class _HomePageViewState extends State<HomePageView> {
         TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
     const List<Widget> _widgetOptions = <Widget>[
       MainScreen(),
-      FavouriteScreen(),
+        FavouriteScreen(),
       Text(
         'Search',
         style: optionStyle,
