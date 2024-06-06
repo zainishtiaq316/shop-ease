@@ -402,7 +402,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           print("${streetTextEditingController.text}");
           print("${ genderEditingController.text}");
         await  updateProfileController.updateProfileMethod(
-             
+               pickImage,
               firstNameEditingController.text.trim(),
               lastNameEditingController.text.trim(),
               emailEditingController.text.trim(),
@@ -668,43 +668,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       pickImage = file;
                     });
                   }
-                  if (pickImage != null) {
-                    CircularProgressIndicator();
-                    final image = await uploaderService.uploadFile(
-                        pickImage!, "Profile_Images", FileType.Image);
-
-                    // await FirebaseDatabase.instance
-                    //     .ref("Users")
-                    //     .child(FirebaseAuth.instance.currentUser!.uid)
-                    //     .update({"photoURL": image.downloadLink});
-                    await FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update({
-                      "photoURL": image.downloadLink,
-
-                      // "firstName": firstNameEditingController.text.trim(),
-                      // "secondName": lastNameEditingController.text.trim(),
-                      // "phoneNumber": phoneNumberEditingController.text.trim(),
-                    }).catchError((e) {
-                      Fluttertoast.showToast(msg: e!.message);
-                    });
-
-                    await FirebaseAuth.instance.currentUser!
-                        .updatePhotoURL(image.downloadLink)
-                        .whenComplete(() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditProfileScreen()));
-
-                      Fluttertoast.showToast(msg: "Profile Updated");
-
-                      setState(() {
-                        pickImage = null;
-                      });
-                    });
-                  }
+                 
                 },
               ),
               ListTile(
@@ -719,43 +683,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       pickImage = file;
                     });
                   }
-                  if (pickImage != null) {
-                    CircularProgressIndicator();
-                    final image = await uploaderService.uploadFile(
-                        pickImage!, "Profile_Images", FileType.Image);
+                  // if (pickImage != null) {
+                  //   CircularProgressIndicator();
+                  //   final image = await uploaderService.uploadFile(
+                  //       pickImage!, "Profile_Images", FileType.Image);
 
-                    // await FirebaseDatabase.instance
-                    //     .ref("Users")
-                    //     .child(FirebaseAuth.instance.currentUser!.uid)
-                    //     .update({"photoURL": image.downloadLink});
-                    await FirebaseFirestore.instance
-                        .collection("users")
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .update({
-                      "photoURL": image.downloadLink,
+                  //   // await FirebaseDatabase.instance
+                  //   //     .ref("Users")
+                  //   //     .child(FirebaseAuth.instance.currentUser!.uid)
+                  //   //     .update({"photoURL": image.downloadLink});
+                  //   await FirebaseFirestore.instance
+                  //       .collection("users")
+                  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+                  //       .update({
+                  //     "photoURL": image.downloadLink,
 
-                      // "firstName": firstNameEditingController.text.trim(),
-                      // "secondName": lastNameEditingController.text.trim(),
-                      // "phoneNumber": phoneNumberEditingController.text.trim(),
-                    }).catchError((e) {
-                      Fluttertoast.showToast(msg: e!.message);
-                    });
+                  //     // "firstName": firstNameEditingController.text.trim(),
+                  //     // "secondName": lastNameEditingController.text.trim(),
+                  //     // "phoneNumber": phoneNumberEditingController.text.trim(),
+                  //   }).catchError((e) {
+                  //     Fluttertoast.showToast(msg: e!.message);
+                  //   });
 
-                    await FirebaseAuth.instance.currentUser!
-                        .updatePhotoURL(image.downloadLink)
-                        .whenComplete(() {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomePageView()));
+                  //   await FirebaseAuth.instance.currentUser!
+                  //       .updatePhotoURL(image.downloadLink)
+                  //       .whenComplete(() {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => HomePageView()));
 
-                      Fluttertoast.showToast(msg: "Profile Updated");
+                  //     Fluttertoast.showToast(msg: "Profile Updated");
 
-                      setState(() {
-                        pickImage = null;
-                      });
-                    });
-                  }
+                  //     setState(() {
+                  //       pickImage = null;
+                  //     });
+                  //   });
+                  // }
                 },
               ),
             ],
