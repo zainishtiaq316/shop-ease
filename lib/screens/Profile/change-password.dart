@@ -6,6 +6,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/get_instance.dart';
+import 'package:shopease/controllers/update-password-controller.dart';
 import 'package:shopease/screens/Profile/profile-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
@@ -44,6 +47,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   bool _obscureConfirmPassword = true;
   @override
   Widget build(BuildContext context) {
+      UpdatePasswordController updateProfileController =
+        Get.put(UpdatePasswordController());
     //password field
     final passwordField = TextFormField(
       autofocus: false,
@@ -138,17 +143,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           if (passwordEditingController.text ==
               confirmpasswordEditingController.text) {
             try {
-              // Get the current user
-              User? user = _auth.currentUser;
-              if (user != null) {
-                // Update the password
-                await CircularProgressIndicator();
-                await user.updatePassword(passwordEditingController.text);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ProfileScreen()));
-                // Password updated successfully
-               Fluttertoast.showToast(msg: "Password updated successfully");
-                // You can navigate to another screen or show a success message here
-              }
+            updateProfileController.updatePasswordMethod(passwordEditingController.text.trim());
             } catch (e) {
               // Handle any errors that occur during password update
               Navigator.pop(context);

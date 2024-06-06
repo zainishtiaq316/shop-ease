@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shopease/screens/Profile/edit-profile.dart';
+import 'package:shopease/screens/Profile/language-screen.dart';
 import 'package:shopease/screens/Profile/my-account.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 import 'change-password.dart';
+import 'help-screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -46,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             return SingleChildScrollView(
               child: Container(
-                height: MediaQuery.of(context).size.height * 1.21,
+                height: MediaQuery.of(context).size.height * 1.3,
                 width: MediaQuery.of(context).size.width,
                 color: appColor,
                 child: Column(
@@ -256,7 +259,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.175,
+                                    MediaQuery.of(context).size.height * 0.26,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20)),
@@ -265,6 +268,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       left: 20, right: 20, top: 15, bottom: 15),
                                   child: Column(
                                     children: [
+                                       GestureDetector(
+                                        onTap: (){
+                                          Get.to(()=>LanguageSettings());
+                                        },
+                                         child: buttons(
+                                            "assets/images/language.png",
+                                            "Language",
+                                            Colors.amber,
+                                            Colors.amber.shade100),
+                                       ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
                                       buttons(
                                           "assets/images/myOrders.png",
                                           "My Orders",
@@ -280,8 +303,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       SizedBox(
                                         height: 5,
                                       ),
-                                      buttons("assets/images/help.png", "Help",
-                                          Colors.purple, Colors.purple.shade100)
+                                      GestureDetector(
+                                        onTap: (){
+
+                                          Get.to(()=>HelpCenterScreen());
+                                        },
+                                        child: buttons("assets/images/help.png", "Help",
+                                            Colors.purple, Colors.purple.shade100),
+                                      )
                                     ],
                                   ),
                                 ),
