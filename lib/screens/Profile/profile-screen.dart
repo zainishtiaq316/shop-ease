@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:shopease/screens/Profile/edit-profile.dart';
 import 'package:shopease/screens/Profile/language-screen.dart';
 import 'package:shopease/screens/Profile/my-account.dart';
+import 'package:shopease/screens/favourite/favourite-screen.dart';
+import 'package:shopease/screens/user-panel/all-orders-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 import 'change-password.dart';
@@ -22,9 +24,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    
     User? user = FirebaseAuth.instance.currentUser;
-     String? imageUrl = user?.photoURL;
+    String? imageUrl = user?.photoURL;
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance
             .collection('users')
@@ -49,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
             return SingleChildScrollView(
               child: Container(
-                height: MediaQuery.of(context).size.height * 1.3,
+                height: MediaQuery.of(context).size.height * 1.4,
                 width: MediaQuery.of(context).size.width,
                 color: appColor,
                 child: Column(
@@ -61,19 +62,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         CircleAvatar(
                           radius: 70,
-                          backgroundImage: imageUrl != null
-                                              ? NetworkImage(imageUrl)
-                                              : null,
-                                          child: imageUrl == null
-                                              ? Text(
-                                                  firstName != null
-                                                      ? firstName[0].toUpperCase()
-                                                      : "",
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                  ),
-                                                )
-                                              : null,),
+                          backgroundImage:
+                              imageUrl != null ? NetworkImage(imageUrl) : null,
+                          child: imageUrl == null
+                              ? Text(
+                                  firstName != null
+                                      ? firstName[0].toUpperCase()
+                                      : "",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                )
+                              : null,
+                        ),
                         Positioned(
                             right: 0,
                             top: 90,
@@ -148,8 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       left: 20, right: 20, top: 15, bottom: 15),
                                   child: Column(
                                     children: [
-                                      personalDetail("Email",
-                                          "${email??""}"),
+                                      personalDetail("Email", "${email ?? ""}"),
                                       SizedBox(
                                         height: 5,
                                       ),
@@ -161,8 +161,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 5,
                                       ),
                                       // 24-06-2001
+                                      personalDetail("Date of Birth",
+                                          "${dateOfBirth ?? ""}"),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
                                       personalDetail(
-                                          "Date of Birth", "${dateOfBirth??""}"),
+                                          "Gender", "${gender ?? ""}"),
                                       SizedBox(
                                         height: 5,
                                       ),
@@ -173,18 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       SizedBox(
                                         height: 5,
                                       ),
-                                      personalDetail("Gender", "${gender??""}"),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Divider(
-                                        thickness: 2,
-                                        color: Colors.grey.shade300,
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      personalDetail("Phone", "${phone??""}"),
+                                      personalDetail("Phone", "${phone ?? ""}"),
                                     ],
                                   ),
                                 ),
@@ -259,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
                                 height:
-                                    MediaQuery.of(context).size.height * 0.26,
+                                    MediaQuery.of(context).size.height * 0.35,
                                 decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(20)),
@@ -268,31 +269,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       left: 20, right: 20, top: 15, bottom: 15),
                                   child: Column(
                                     children: [
-                                       GestureDetector(
-                                        onTap: (){
-                                          Get.to(()=>LanguageSettings());
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => LanguageSettings());
                                         },
-                                         child: buttons(
+                                        child: buttons(
                                             "assets/images/language.png",
                                             "Language",
-                                            Colors.amber,
-                                            Colors.amber.shade100),
-                                       ),
-                                      SizedBox(
-                                        height: 5,
+                                            Colors.brown,
+                                            Colors.brown.shade100),
                                       ),
-                                      Divider(
-                                        thickness: 2,
-                                        color: Colors.grey.shade300,
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      buttons(
-                                          "assets/images/myOrders.png",
-                                          "My Orders",
-                                          Colors.green,
-                                          Colors.green.shade100),
                                       SizedBox(
                                         height: 5,
                                       ),
@@ -304,12 +290,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         height: 5,
                                       ),
                                       GestureDetector(
-                                        onTap: (){
-
-                                          Get.to(()=>HelpCenterScreen());
+                                        onTap: () {
+                                          Get.to(() => FavouriteScreen());
                                         },
-                                        child: buttons("assets/images/help.png", "Help",
-                                            Colors.purple, Colors.purple.shade100),
+                                        child: buttons(
+                                            "assets/images/favourites.png",
+                                            "Favourites",
+                                            Colors.amber,
+                                            Colors.amber.shade100),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => AllOrdersScreen());
+                                        },
+                                        child: buttons(
+                                            "assets/images/myOrders.png",
+                                            "My Orders",
+                                            Colors.green,
+                                            Colors.green.shade100),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Divider(
+                                        thickness: 2,
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.to(() => HelpCenterScreen());
+                                        },
+                                        child: buttons(
+                                            "assets/images/help.png",
+                                            "Help",
+                                            Colors.purple,
+                                            Colors.purple.shade100),
                                       )
                                     ],
                                   ),

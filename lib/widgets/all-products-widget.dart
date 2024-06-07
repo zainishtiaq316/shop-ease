@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_card/image_card.dart';
+import 'package:shopease/controllers/favourite-controller.dart';
 import 'package:shopease/models/categories-model.dart';
 import 'package:shopease/models/product-model.dart';
 import 'package:shopease/utils/app-constant.dart';
+import 'package:shopease/widgets/favourite-button.dart';
 
 import '../screens/user-panel/product-detail-screen.dart';
 
@@ -18,6 +20,7 @@ class AllProductsWidget extends StatefulWidget {
 }
 
 class _AllProductsWidgetState extends State<AllProductsWidget> {
+   final FavoriteController  favoriteController=  Get.put(FavoriteController());
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -81,29 +84,40 @@ class _AllProductsWidgetState extends State<AllProductsWidget> {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      GestureDetector(
-                        onTap: ()=> Get.to(()=> ProductDetailsScreen(productModel: productModel))
-                        
-                        , child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Container(
-                            child: FillImageCard(
-                              borderRadius: 20.0,
-                              width: Get.width / 2.3,
-                              heightImage: Get.height / 6,
-                              imageProvider: CachedNetworkImageProvider(
-                                  productModel.productImages[0]),
-                              title: Center(
-                                  child: Text(
-                                productModel.productName,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(fontSize: 12.0),
-                              )),
-                              footer: Center(child: Text("PKR" + productModel.fullPrice)),
+                      Stack(
+                        children: [
+                          GestureDetector(
+                            onTap: ()=> Get.to(()=> ProductDetailsScreen(productModel: productModel))
+                            
+                            , child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Container(
+                                child: FillImageCard(
+                                  borderRadius: 20.0,
+                                  width: Get.width / 2.3,
+                                  heightImage: Get.height / 6,
+                                  imageProvider: CachedNetworkImageProvider(
+                                      productModel.productImages[0]),
+                                  title: Center(
+                                      child: Text(
+                                    productModel.productName,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(fontSize: 12.0),
+                                  )),
+                                  footer: Center(child: Text("PKR" + productModel.fullPrice)),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                         Positioned(
+                                top: 15,
+                                right: 15,
+                                child: Container(
+                                child: ItemFavoriteButton(model: productModel)
+                              ))
+                        
+                        ],
                       )
                     ],
                   );

@@ -30,10 +30,25 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppConstant.appMainColor,
-        title: Text("All Orders"),
-      ),
+      backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: appColor,
+          surfaceTintColor: appColor,
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            "My Orders",
+            style: TextStyle(color: Colors.white),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+            onPressed: () {
+              //passing this to a route
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+       
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('orders')

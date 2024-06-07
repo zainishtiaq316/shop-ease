@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:shopease/controllers/favourite-controller.dart';
 import 'package:shopease/models/product-model.dart';
+import 'package:shopease/utils/app-constant.dart';
 
 class ItemFavoriteButton extends StatelessWidget {
   final ProductModel model;
@@ -19,14 +20,15 @@ class ItemFavoriteButton extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final bool isFavorite = snapshot.data!.exists;
-          return IconButton(
-            icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
-            onPressed: () => favoriteController.toggleFavorite(model, isFavorite),
+          return GestureDetector(
+             onTap: () => favoriteController.toggleFavorite(model, isFavorite),
+            child: Icon(isFavorite ? Icons.favorite : Icons.favorite_border, color: appColor,),
+           
           );
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          return IconButton(onPressed: null, icon: Icon(Icons.favorite_border));
+          return GestureDetector(onTap: null, child: Icon(Icons.favorite_border, color: appColor,));
         }
       },
     );

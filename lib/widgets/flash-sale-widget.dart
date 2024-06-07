@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_card/image_card.dart';
+import 'package:shopease/controllers/favourite-controller.dart';
 import 'package:shopease/models/categories-model.dart';
 import 'package:shopease/models/product-model.dart';
 import 'package:shopease/screens/user-panel/product-detail-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
+import 'package:shopease/widgets/favourite-button.dart';
 
 import '../screens/user-panel/all-fetch-sale-product-screen.dart';
 import 'heading-widget.dart';
@@ -20,7 +22,9 @@ class FlashSaleWidget extends StatefulWidget {
 }
 
 class _FlashSaleWidgetState extends State<FlashSaleWidget> {
+   final FavoriteController  favoriteController=  Get.put(FavoriteController());
   @override
+  
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: FirebaseFirestore.instance
@@ -166,6 +170,7 @@ class _FlashSaleWidgetState extends State<FlashSaleWidget> {
                                               ],
                                             ),
                                           ),
+                                          
                                           SizedBox(height: 8.0),
                                         ],
                                       ),
@@ -177,7 +182,7 @@ class _FlashSaleWidgetState extends State<FlashSaleWidget> {
                                 top: 12,
                                 right: 15,
                                 child: Container(
-                                child: Icon(Icons.favorite_outline,color: Colors.purple,)
+                                child: ItemFavoriteButton(model: productModel)
                               ))
                               ],
                             )

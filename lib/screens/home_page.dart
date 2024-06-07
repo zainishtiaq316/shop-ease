@@ -4,12 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:shopease/controllers/favourite-controller.dart';
 import 'package:shopease/screens/auth-ui/splash-screen.dart';
 import 'package:shopease/screens/favourite/favourite-screen.dart';
+import 'package:shopease/screens/user-panel/home-page-cart.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 import 'package:shopease/widgets/custom-drawer-widget.dart';
 
+import '../controllers/cart-price-controller.dart';
 import 'Profile/profile-screen.dart';
 import 'user-panel/cart-screen.dart';
 
@@ -21,6 +24,8 @@ class HomePageView extends StatefulWidget {
 }
 
 class _HomePageViewState extends State<HomePageView> {
+   final ProductPriceController productPriceController =
+      Get.put(ProductPriceController());
   late FocusNode myFocusNode;
 
   DateTime? currentBackPressTime;
@@ -62,7 +67,7 @@ class _HomePageViewState extends State<HomePageView> {
         TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
     const List<Widget> _widgetOptions = <Widget>[
       MainScreen(),
-        FavouriteScreen(),
+      HomeCartScreen(),
       Text(
         'Search',
         style: optionStyle,
@@ -74,44 +79,50 @@ class _HomePageViewState extends State<HomePageView> {
         onWillPop: onWillPop,
         child: Scaffold(
           backgroundColor: Colors.grey.shade100,
-          
           drawer: DrawerWidget(),
           appBar: AppBar(
             surfaceTintColor: appColor,
-             iconTheme: IconThemeData(color: AppConstant.appTextColor),
-        systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor:  appColor,
-            statusBarIconBrightness: Brightness.light),
-        backgroundColor: appColor,
-          centerTitle: true,
+            iconTheme: IconThemeData(color: AppConstant.appTextColor),
+            systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: appColor,
+                statusBarIconBrightness: Brightness.light),
+            backgroundColor: appColor,
+            centerTitle: true,
             title: Text(
               _selectedIndex == 0
-                  ? '${ AppConstant.appMainName}'
+                  ? '${AppConstant.appMainName}'
                   : _selectedIndex == 1
-                      ? 'Favourites'
+                      ? 'Cart'
                       : _selectedIndex == 2
                           ? 'Search'
                           : 'Profile',
-
-                 style: TextStyle(color: AppConstant.appTextColor),
+              style: TextStyle(color: AppConstant.appTextColor),
             ),
             actions: _selectedIndex == 0
                 ? [
-                   GestureDetector(
-            onTap: () => Get.to(() => CartScreen()),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.shopping_cart),
-            ),
-          )
+                    GestureDetector(
+                      onTap: () => Get.to(() => CartScreen()),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.shopping_cart),
+                      ),
+                    )
                   ]
-                : [],
+                :  _selectedIndex == 1
+                ? [
+                    GestureDetector(
+                      onTap: () => productPriceController.deleteAllCarts(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.delete),
+                      ),
+                    )
+                  ] : [],
           ),
           body: Center(
             child: _widgetOptions.elementAt(_selectedIndex),
           ),
           bottomNavigationBar: Container(
-            
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [appColor, appColor],
@@ -127,9 +138,11 @@ class _HomePageViewState extends State<HomePageView> {
                 ),
               ],
             ),
-            margin: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+            margin:
+                const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
               child: GNav(
                 backgroundColor: Colors.transparent,
                 rippleColor: Colors.grey[300]!,
@@ -148,8 +161,8 @@ class _HomePageViewState extends State<HomePageView> {
                     iconColor: Colors.white,
                   ),
                   GButton(
-                    icon: Icons.favorite,
-                    text: 'Likes',
+                    icon: Icons.shopping_cart,
+                    text: 'Cart',
                     iconColor: Colors.white,
                   ),
                   GButton(
@@ -172,8 +185,6 @@ class _HomePageViewState extends State<HomePageView> {
               ),
             ),
           ),
-        
-        
         ));
   }
 }

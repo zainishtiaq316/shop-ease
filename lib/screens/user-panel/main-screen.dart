@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shopease/controllers/favourite-controller.dart';
 import 'package:shopease/screens/auth-ui/welcome-screen.dart';
 import 'package:shopease/screens/user-panel/all-categories-screen.dart';
 import 'package:shopease/screens/user-panel/all-fetch-sale-product-screen.dart';
@@ -25,6 +26,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final FavoriteController  favoriteController=  Get.put(FavoriteController());
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
