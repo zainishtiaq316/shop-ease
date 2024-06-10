@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shopease/controllers/get-user-data-controller.dart';
 import 'package:shopease/controllers/signin-controller.dart';
 import 'package:shopease/screens/auth-ui/signup-screen.dart';
+import 'package:shopease/screens/home_page.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
@@ -209,7 +210,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         AppConstant.appSecondaryColor,
                                     colorText: AppConstant.appTextColor);
                               } else {
-                                Get.offAll(() => MainScreen());
+                                Get.offAll(() => HomePageView());
                                 Get.snackbar("Success User Login",
                                     "Login Scuccessfully!",
                                     snackPosition: SnackPosition.BOTTOM,

@@ -8,6 +8,7 @@ import 'package:shopease/utils/app-constant.dart';
 
 class ProductPriceController extends GetxController {
   RxDouble totalPrice = 0.0.obs;
+  RxInt totalItemCount = 0.obs; // Add this line
   User? user = FirebaseAuth.instance.currentUser;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -35,13 +36,16 @@ class ProductPriceController extends GetxController {
         .get();
 
     double sum = 0;
+    int itemCount = 0; // Add this line
     for (final doc in snapshot.docs) {
       final data = doc.data();
       if (data != null && data.containsKey('productTotalPrice')) {
         sum += (data['productTotalPrice'] as num).toDouble();
+         itemCount += data['productQuantity'] as int; // Add this line
       }
     }
     totalPrice.value = sum;
+    totalItemCount.value = itemCount; // Add this line
   }
 
   void deleteAllCarts() async {

@@ -20,9 +20,9 @@ class SignUpController extends GetxController {
   
   Future<UserCredential?> signUpMethod(
       String userName,
+       String secondName,
       String userEmail,
       String userPhone,
-      String secondName,
       String userCity,
       String userPassword,
       String userDeviceToken) async {

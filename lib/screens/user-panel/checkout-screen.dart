@@ -34,107 +34,197 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppConstant.appMainColor,
-        title: Text("Checkout Screen"),
+        backgroundColor: appColor,
+        surfaceTintColor: appColor,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Check Out",
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () {
+            //passing this to a route
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () => productPriceController.deleteAllCarts(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
       ),
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('cart')
-              .doc(user!.uid)
-              .collection('cartOrders')
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text("Error"),
-              );
-            }
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('cart')
+                .doc(user!.uid)
+                .collection('cartOrders')
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text("Error"),
+                );
+              }
 
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Container(
-                height: Get.height / 5,
-                child: Center(
-                  child: CupertinoActivityIndicator(),
-                ),
-              );
-            }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container(
+                  height: Get.height / 5,
+                  child: Center(
+                    child: CupertinoActivityIndicator(),
+                  ),
+                );
+              }
 
-            if (snapshot.data!.docs.isEmpty) {
-              return Center(
-                child: Text("No products found"),
-              );
-            }
-            if (snapshot.data != null) {
-              return Container(
-                  child: ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final productData = snapshot.data!.docs[index];
-                        CartModel cartModel = CartModel(
-                            categoryId: productData['categoryId'],
-                            categoryName: productData['categoryName'],
-                            createdAt: productData['createdAt'],
-                            deliveryTime: productData['deliveryTime'],
-                            fullPrice: productData['fullPrice'],
-                            isSale: productData['isSale'],
-                            productDescription:
-                                productData['productDescription'],
-                            productId: productData['productId'],
-                            productImages: productData['productImages'],
-                            productName: productData['productName'],
-                            salePrice: productData['salePrice'],
-                            updatedAt: productData['updatedAt'],
-                            productQuantity: productData['productQuantity'],
-                            productTotalPrice:
-                                 double.parse(productData['productTotalPrice'].toString()));
+              if (snapshot.data!.docs.isEmpty) {
+                return Center(
+                  child: Text("No products found"),
+                );
+              }
+              if (snapshot.data != null) {
+                return Container(
+                    child: ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        shrinkWrap: true,
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final productData = snapshot.data!.docs[index];
+                          CartModel cartModel = CartModel(
+                              categoryId: productData['categoryId'],
+                              categoryName: productData['categoryName'],
+                              createdAt: productData['createdAt'],
+                              deliveryTime: productData['deliveryTime'],
+                              fullPrice: productData['fullPrice'],
+                              isSale: productData['isSale'],
+                              productDescription:
+                                  productData['productDescription'],
+                              productId: productData['productId'],
+                              productImages: productData['productImages'],
+                              productName: productData['productName'],
+                              salePrice: productData['salePrice'],
+                              updatedAt: productData['updatedAt'],
+                              productQuantity: productData['productQuantity'],
+                              productTotalPrice: double.parse(
+                                  productData['productTotalPrice'].toString()));
 
-                        //CALCULATE PRICE
+                          //CALCULATE PRICE
 
-                        productPriceController.fetchProductPrice();
-                        return SwipeActionCell(
-                            key: ObjectKey(cartModel.productId),
-                            trailingActions: [
-                              SwipeAction(
-                                  title: "Delete",
-                                  forceAlignmentToBoundary: true,
-                                  performsFirstActionWithFullSwipe: true,
-                                  onTap: (CompletionHandler handler) async {
-                                    await FirebaseFirestore.instance
-                                        .collection('cart')
-                                        .doc(user!.uid)
-                                        .collection('cartOrders')
-                                        .doc(cartModel.productId)
-                                        .delete();
-                                    print("deleted");
-                                  })
-                            ],
-                            child: Card(
-                              elevation: 5,
-                              color: AppConstant.appTextColor,
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  backgroundColor: AppConstant.appMainColor,
-                                  backgroundImage:
-                                      NetworkImage(cartModel.productImages[0]),
-                                ),
-                                title: Text(cartModel.productName),
-                                subtitle: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        cartModel.productTotalPrice.toString()),
+                          productPriceController.fetchProductPrice();
+                          return SwipeActionCell(
+                              key: ObjectKey(cartModel.productId),
+                              trailingActions: [
+                                SwipeAction(
+                                    title: "Delete",
+                                    forceAlignmentToBoundary: true,
+                                    performsFirstActionWithFullSwipe: true,
+                                    onTap: (CompletionHandler handler) async {
+                                      await FirebaseFirestore.instance
+                                          .collection('cart')
+                                          .doc(user!.uid)
+                                          .collection('cartOrders')
+                                          .doc(cartModel.productId)
+                                          .delete();
+                                      print("deleted");
+                                    })
+                              ],
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 5.0),
+                                padding: EdgeInsets.all(10.0),
+                                decoration: BoxDecoration(
+                                  color: AppConstant.appTextColor,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 3,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3),
+                                    ),
                                   ],
                                 ),
-                              ),
-                            ));
-                      }));
-            }
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.25,
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.25,
+                                      decoration: BoxDecoration(
+                                        color: appColor,
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                              cartModel.productImages[0]),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10.0),
+                                    Expanded(
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.width *
+                                                0.25,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text(
+                                              cartModel.productName,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.black,
+                                                fontSize: 17.0,
+                                              ),
+                                            ),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  child: Text(
+                                                    'PKR ${cartModel.productTotalPrice.toString()}',
+                                                    style: TextStyle(
+                                                        color: Colors.green,
+                                                        fontSize: 13.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ),
+                                               ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ));
+                        }));
+              }
 
-            return Container();
-          }),
+              return Container();
+            }),
+      ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(bottom: 5.0),
         child: Row(
@@ -239,22 +329,21 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: AppConstant.appMainColor,
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 10)),
-                  onPressed: () async{
+                  onPressed: () async {
                     if (nameController.text != '' &&
                         phoneController.text != '' &&
                         addressController.text != '') {
                       String name = nameController.text.trim();
                       String phone = phoneController.text.trim();
                       String address = addressController.text.trim();
-                      String customerToken = await getCustomerDeviceController();
+                      String customerToken =
+                          await getCustomerDeviceController();
                       placeOrder(
-                        context : context,
-                        customerName : name,
-                        customerPhone :phone,
-                        customerAddress : address,
-                        customerDeviceToken : customerToken
-                      );
-
+                          context: context,
+                          customerName: name,
+                          customerPhone: phone,
+                          customerAddress: address,
+                          customerDeviceToken: customerToken);
                     } else {
                       print("please fill all details");
                     }

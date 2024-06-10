@@ -15,6 +15,7 @@ import 'package:shopease/widgets/custom-drawer-widget.dart';
 import '../controllers/cart-price-controller.dart';
 import 'Profile/profile-screen.dart';
 import 'user-panel/cart-screen.dart';
+import 'package:badges/badges.dart' as badges;
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -100,13 +101,22 @@ class _HomePageViewState extends State<HomePageView> {
             ),
             actions: _selectedIndex == 0
                 ? [
-                    GestureDetector(
-                      onTap: () => Get.to(() => CartScreen()),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(Icons.shopping_cart),
-                      ),
-                    )
+                   GestureDetector(
+            onTap: () => Get.to(() => CartScreen()),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 20),
+              child: Obx(() {
+                return badges.Badge(
+                  badgeContent: Text(
+                    productPriceController.totalItemCount.value.toString(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  child: Icon(Icons.shopping_cart),
+                  showBadge: productPriceController.totalItemCount.value > 0,
+                );
+              }),
+            ),
+          ),
                   ]
                 :  _selectedIndex == 1
                 ? [
@@ -185,6 +195,7 @@ class _HomePageViewState extends State<HomePageView> {
               ),
             ),
           ),
+      
         ));
   }
 }

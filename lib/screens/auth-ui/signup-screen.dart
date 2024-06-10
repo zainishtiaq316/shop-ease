@@ -365,8 +365,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           );
                         } else {
                           UserCredential? userCredential =
-                              await signUpController.signUpMethod(fname, email,
-                                  phone, city, password, userDeviceToken, sname);
+                              await signUpController.signUpMethod(fname, sname, email,
+                                  phone, city, password, userDeviceToken);
 
                           if (userCredential != null) {
                             Get.snackbar("Verification email sent",
