@@ -82,10 +82,11 @@ class _HomePageViewState extends State<HomePageView> {
           backgroundColor: Colors.grey.shade100,
           drawer: DrawerWidget(),
           appBar: AppBar(
+            
             surfaceTintColor: appColor,
             iconTheme: IconThemeData(color: AppConstant.appTextColor),
             systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarColor: appColor,
+                statusBarColor: Colors.transparent,
                 statusBarIconBrightness: Brightness.light),
             backgroundColor: appColor,
             centerTitle: true,

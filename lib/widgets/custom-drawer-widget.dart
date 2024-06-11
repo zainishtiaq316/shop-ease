@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,13 +18,32 @@ class DrawerWidget extends StatefulWidget {
 class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: Get.height / 25),
+    User? user = FirebaseAuth.instance.currentUser;
+ 
+  String? imageUrl = user?.photoURL;
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: FirebaseFirestore.instance.collection('users').doc(user?.uid).snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator(color: appColor,)); // Loading indicator while fetching data
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          Map<String, dynamic>? userData = snapshot.data?.data();
+          String? firstName = userData?['firstName'];
+          String? SecondName = userData?['secondName'];
+          String? email = userData?['email'];
+
+          return Padding(
+      padding: EdgeInsets.only(top: 10),
       child: Drawer(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20.0),
-                bottomRight: Radius.circular(20.0))),
+      
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20.0),
+              bottomRight: Radius.circular(20.0))),
+      child: Padding(
+        padding: EdgeInsets.only(top: Get.height / 25),
         child: Wrap(
           runSpacing: 10,
           children: [
@@ -33,18 +53,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               child: ListTile(
                 titleAlignment: ListTileTitleAlignment.center,
                 title: Text(
-                  "Waris",
+                  "${firstName ??""} ${SecondName?? ""}",
                   style: TextStyle(color: AppConstant.appTextColor),
                 ),
                 subtitle: Text(
-                  "Version 1.0.1",
+                  "${email??""}",
                   style: TextStyle(color: AppConstant.appTextColor),
                 ),
                 leading: CircleAvatar(
                   radius: 22.0,
                   backgroundColor: AppConstant.appMainColor,
                   child: Text(
-                    "W",
+                    "${firstName?[0]}",
                     style: TextStyle(color: AppConstant.appTextColor),
                   ),
                 ),
@@ -169,8 +189,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             ),
           ],
         ),
-        backgroundColor: AppConstant.appSecondaryColor,
       ),
-    );
-  }
+      backgroundColor: appColor,
+    ),);}
+      },
+    ); }
 }
