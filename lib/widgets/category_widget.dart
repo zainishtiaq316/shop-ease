@@ -8,6 +8,7 @@ import 'package:image_card/image_card.dart';
 import 'package:shopease/models/categories-model.dart';
 import 'package:shopease/screens/user-panel/all-categories-screen.dart';
 import 'package:shopease/screens/user-panel/single-category-product-screen.dart';
+import 'package:shopease/utils/app-constant.dart';
 import 'package:shopease/widgets/heading-widget.dart';
 
 class CategoriesWidget extends StatefulWidget {
@@ -33,15 +34,15 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
             return Container(
               height: Get.height / 5,
               child: Center(
-                child: CupertinoActivityIndicator(),
+                child: CupertinoActivityIndicator(
+                  color: appColor,
+                ),
               ),
             );
           }
 
           if (snapshot.data!.docs.isEmpty) {
-            return Center(
-              child: Text("No category found"),
-            );
+            return SizedBox.shrink();
           }
           if (snapshot.data != null) {
             return Column(
@@ -49,14 +50,16 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
               children: [
                 HeadingWidget(
                   headingTitle: "Categories",
-                  headSubTitle: "According to your budget",
+                  headSubTitle: "Explore our diverse range",
                   onTap: () => Get.to(() => AllCategoriesScreen()),
-                  buttonText: "See all",
+                  buttonText: "View More",
                 ),
                 Container(
-                  height: Get.height / 5.5,
+                  height: Get.height / 7,
                   child: ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
+                      itemCount: snapshot.data!.docs.length > 7
+                          ? 7
+                          : snapshot.data!.docs.length,
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -73,43 +76,43 @@ class _CategoriesWidgetState extends State<CategoriesWidget> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              onTap: () => Get.to(() =>
-                                  AllSingleCategoryProductScreen(
-                                      categoryId: categoriesModel.categoryId)),
+                              onTap: () =>
+                                  Get.to(() => AllSingleCategoryProductScreen(
+                                        categoryId: categoriesModel.categoryId,
+                                        name: categoriesModel.categoryName,
+                                      )),
                               child: Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 5),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      // Circular Image
-                                      Container(
-                                        width: Get.width / 4.5,
-                                        height: Get.width /
-                                            4.5, // Use width to ensure it's a circle
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                            image: CachedNetworkImageProvider(
-                                                categoriesModel.categoryImg),
-                                            fit: BoxFit.cover,
-                                          ),
+                                padding: EdgeInsets.only(
+                                    left: 10, right: 8, top: 8, bottom: 8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    // Circular Image
+                                    Container(
+                                      width: Get.width / 5.5,
+                                      height: Get.width /
+                                          5.5, // Use width to ensure it's a circle
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          image: CachedNetworkImageProvider(
+                                              categoriesModel.categoryImg),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      // Category Name
-                                      SizedBox(
-                                          height:
-                                              8.0), // Space between image and text
-                                      Text(
-                                        categoriesModel.categoryName,
-                                        style: TextStyle(
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.bold),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                    // Category Name
+                                    SizedBox(
+                                        height:
+                                            8.0), // Space between image and text
+                                    Text(
+                                      categoriesModel.categoryName,
+                                      style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w500),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
                                 ),
                               ),
                             )

@@ -22,9 +22,8 @@ class FlashSaleWidget extends StatefulWidget {
 }
 
 class _FlashSaleWidgetState extends State<FlashSaleWidget> {
-   final FavoriteController  favoriteController=  Get.put(FavoriteController());
+  final FavoriteController favoriteController = Get.put(FavoriteController());
   @override
-  
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: FirebaseFirestore.instance
@@ -42,15 +41,15 @@ class _FlashSaleWidgetState extends State<FlashSaleWidget> {
             return Container(
               height: Get.height / 5,
               child: Center(
-                child: CupertinoActivityIndicator(),
+                child: CupertinoActivityIndicator(
+                  color: appColor,
+                ),
               ),
             );
           }
 
           if (snapshot.data!.docs.isEmpty) {
-            return Center(
-              child: Text("No products found"),
-            );
+            return SizedBox.shrink();
           }
           if (snapshot.data != null) {
             return Column(
@@ -58,14 +57,18 @@ class _FlashSaleWidgetState extends State<FlashSaleWidget> {
               children: [
                 HeadingWidget(
                   headingTitle: "Flash Sale",
-                  headSubTitle: "According to your budget",
+                  headSubTitle: "Grab them before they're gone!",
                   onTap: () => Get.to(() => AllFetchSaleProductScreen()),
-                  buttonText: "See all",
+                  buttonText: "View More",
                 ),
                 Container(
-                  height: Get.height / 3.5,
+                  // color: Colors.amber,
+                  height: Get.height / 3.15,
+
                   child: ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
+                      itemCount: snapshot.data!.docs.length > 7
+                          ? 7
+                          : snapshot.data!.docs.length,
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -95,97 +98,131 @@ class _FlashSaleWidgetState extends State<FlashSaleWidget> {
                           children: [
                             Stack(
                               children: [
-                             
                                 GestureDetector(
-                                  onTap: () => Get.to(() => ProductDetailsScreen(
-                                      productModel: productModel)),
+                                  onTap: () => Get.to(() =>
+                                      ProductDetailsScreen(
+                                          productModel: productModel)),
                                   child: Padding(
-                                    padding: EdgeInsets.all(5.0),
+                                    padding: EdgeInsets.only(
+                                        left: 10, right: 8, top: 8, bottom: 8),
                                     child: Container(
-                                      width: Get.width / 2.5,
+                                      width: Get.width / 2.2,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20.0),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.3),
-                                            spreadRadius: 2,
-                                            blurRadius: 5,
-                                            offset: Offset(0, 3),
-                                          ),
-                                        ],
-                                        color: Colors.white,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.vertical(
-                                                top: Radius.circular(20.0)),
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                                  productModel.productImages[0],
-                                              width: Get.width / 2.5,
-                                              height: Get.height /
-                                                  6, // Adjusted height for better proportions
-                                              fit: BoxFit.cover,
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.3),
+                                              spreadRadius: 2,
+                                              blurRadius: 5,
+                                              offset: Offset(0, 3),
                                             ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              productModel.productName,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 14.0,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  'Rs ${productModel.salePrice}',
-                                                  style: TextStyle(
-                                                      fontSize: 12.0,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.green,
-                                                      overflow:
-                                                          TextOverflow.ellipsis),
+                                          ],
+                                          color: Colors.white),
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.vertical(
+                                                        top: Radius.circular(
+                                                            10.0),
+                                                        bottom: Radius.circular(
+                                                            10)),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: productModel
+                                                      .productImages[0],
+                                                  width: Get.width / 2,
+                                                  height: Get.height /
+                                                      5.8, // Adjusted height for better proportions
+                                                  fit: BoxFit.cover,
                                                 ),
-                                                SizedBox(width: 5.0),
-                                                Text(
-                                                  '${productModel.fullPrice}',
-                                                  style: TextStyle(
-                                                      fontSize: 12.0,
-                                                      decoration: TextDecoration
-                                                          .lineThrough,
-                                                      color: AppConstant
-                                                          .appSecondaryColor,
-                                                      overflow:
-                                                          TextOverflow.ellipsis),
-                                                ),
-                                              ],
+                                              ),
                                             ),
-                                          ),
-                                          
-                                          SizedBox(height: 8.0),
-                                        ],
+                                            Padding(
+                                              padding: EdgeInsets.all(0.0),
+                                              child: Text(
+                                                productModel.productName,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 14.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.all(0.0),
+                                              child: Text(
+                                                productModel.categoryName,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 12.0,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.grey),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 8.0),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    'Rs ${productModel.salePrice}',
+                                                    style: TextStyle(
+                                                        fontSize: 12.0,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.green,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                  ),
+                                                  SizedBox(width: 5.0),
+                                                  Text(
+                                                    '${productModel.fullPrice}',
+                                                    style: TextStyle(
+                                                        fontSize: 12.0,
+                                                        decoration:
+                                                            TextDecoration
+                                                                .lineThrough,
+                                                        color: AppConstant
+                                                            .appSecondaryColor,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                  ),
+                                                  Spacer(),
+                                                  Icon(
+                                                    Icons.shopping_bag,
+                                                    size: 20,
+                                                    color: Colors.grey,
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              
-                              Positioned(
-                                top: 12,
-                                right: 15,
-                                child: Container(
-                                child: ItemFavoriteButton(model: productModel)
-                              ))
+                                Positioned(
+                                    top: 20,
+                                    right: 20,
+                                    child: Container(
+                                        child: ItemFavoriteButton(
+                                            model: productModel)))
                               ],
                             )
+                         
+                         
                           ],
                         );
                       }),

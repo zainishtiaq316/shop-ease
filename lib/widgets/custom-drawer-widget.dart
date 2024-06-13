@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shopease/screens/home_page.dart';
 import 'package:shopease/screens/user-panel/all-orders-screen.dart';
+import 'package:shopease/screens/user-panel/all-products-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 import '../screens/auth-ui/welcome-screen.dart';
@@ -34,6 +36,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           String? SecondName = userData?['secondName'];
           String? email = userData?['email'];
 
+
           return Padding(
       padding: EdgeInsets.only(top: 10),
       child: Drawer(
@@ -43,39 +46,55 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               topRight: Radius.circular(20.0),
               bottomRight: Radius.circular(20.0))),
       child: Padding(
-        padding: EdgeInsets.only(top: Get.height / 25),
-        child: Wrap(
-          runSpacing: 10,
+        padding: EdgeInsets.only(top: Get.height / 15),
+        child: Column(
+  
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-              child: ListTile(
-                titleAlignment: ListTileTitleAlignment.center,
-                title: Text(
-                  "${firstName ??""} ${SecondName?? ""}",
-                  style: TextStyle(color: AppConstant.appTextColor),
-                ),
-                subtitle: Text(
-                  "${email??""}",
-                  style: TextStyle(color: AppConstant.appTextColor),
-                ),
-                leading: CircleAvatar(
-                  radius: 22.0,
-                  backgroundColor: AppConstant.appMainColor,
-                  child: Text(
-                    "${firstName?[0]}",
-                    style: TextStyle(color: AppConstant.appTextColor),
-                  ),
-                ),
-              ),
-            ),
-            Divider(
+            CircleAvatar(
+                            radius: 60.0,
+                            backgroundColor: Colors.white,
+                          backgroundImage: imageUrl != null ? NetworkImage(imageUrl) : null,
+                        child: imageUrl == null ? Text(
+                          firstName != null ? firstName[0].toUpperCase() : "",
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ) : null,
+                      ),
+         SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            "${firstName ?? ""} ${SecondName?? ""}",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            email??"",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+
+                          ), 
+                          
+                          SizedBox(
+                            height: 15,
+                          ),
+                           Divider(
               indent: 10.0,
               endIndent: 10.0,
               thickness: 1.5,
-              color: Colors.grey,
+              color: Colors.white,
             ),
+             SizedBox(
+                            height: 15,
+                          ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20.0,
@@ -94,8 +113,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   Icons.arrow_forward_ios,
                   color: AppConstant.appTextColor,
                 ),
+                onTap: (){
+                  Get.back();
+                  Get.to(()=>HomePageView());
+                },
               ),
             ),
+         
+           
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20.0,
@@ -114,7 +139,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   Icons.arrow_forward_ios,
                   color: AppConstant.appTextColor,
                 ),
+                onTap: (){
+                  Get.back();
+                  Get.to(()=>AllProductsScreen());
+                },
               ),
+              
             ),
             Padding(
               padding: const EdgeInsets.symmetric(

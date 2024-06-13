@@ -39,10 +39,19 @@ class _MainScreenState extends State<MainScreen> {
               height: Get.height / 90.0,
             ),
             BannerWidet(),
+            SizedBox(
+              height: Get.height / 90.0,
+            ),
            
             CategoriesWidget(),
+             SizedBox(
+              height: Get.height / 90.0,
+            ),
            
             FlashSaleWidget(),
+             SizedBox(
+              height: Get.height / 90.0,
+            ),
             HeadingWidget(
               headingTitle: "All Products",
               headSubTitle: "According to your budget",

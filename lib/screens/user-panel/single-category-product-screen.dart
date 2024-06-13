@@ -10,8 +10,8 @@ import 'package:shopease/screens/user-panel/product-detail-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 class AllSingleCategoryProductScreen extends StatefulWidget {
-  String categoryId;
-   AllSingleCategoryProductScreen({super.key, required this. categoryId});
+  String categoryId; String name;
+   AllSingleCategoryProductScreen({super.key, required this. categoryId, required this.name});
 
   @override
   State<AllSingleCategoryProductScreen> createState() => _AllSingleCategoryProductScreenState();
@@ -21,10 +21,24 @@ class _AllSingleCategoryProductScreenState extends State<AllSingleCategoryProduc
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppConstant.appMainColor,
-        title: Text("Products"),
+       appBar: AppBar(
+        backgroundColor: appColor,
+        surfaceTintColor: appColor,
+        elevation: 0,
+        centerTitle: true,
+        title:  Text(
+          "${widget.name}",
+          style: TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () {
+            //passing this to a route
+            Navigator.of(context).pop();
+          },
+        ),
       ),
+      
 
       body: FutureBuilder(
         future: FirebaseFirestore.instance.collection('products').where('categoryId', isEqualTo: widget.categoryId).get(),
@@ -37,9 +51,9 @@ class _AllSingleCategoryProductScreenState extends State<AllSingleCategoryProduc
 
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
-              height: Get.height / 5,
+             
               child: Center(
-                child: CupertinoActivityIndicator(),
+                child: CupertinoActivityIndicator(color: appColor,),
               ),
             );
           }

@@ -1,20 +1,33 @@
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_notification_channel/flutter_notification_channel.dart';
+import 'package:flutter_notification_channel/notification_importance.dart';
 import 'package:get/get.dart';
-import 'package:shopease/screens/auth-ui/splash-screen.dart';
 
 import 'firebase_options.dart';
 import 'screens/auth-ui/welcome-screen.dart';
-import 'screens/auth-ui/signin-screen.dart';
-import 'screens/user-panel/main-screen.dart';
+
+late Size mq;
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
-  runApp(const MyApp());
+ //enter full-screen
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+  //for setting orientation to portrait only
+  SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
+      .then((value) {
+    _initializeFirebase();
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -33,3 +46,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
+_initializeFirebase() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  var result = await FlutterNotificationChannel().registerNotificationChannel(
+      description: 'For Showing Message Notification',
+      id: 'chats',
+      importance: NotificationImportance.IMPORTANCE_HIGH,
+      name: 'Chats');
+
+  
+}
