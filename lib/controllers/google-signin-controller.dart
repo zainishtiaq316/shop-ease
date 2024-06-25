@@ -13,12 +13,13 @@ import 'getting-token.dart';
 class GoogleSignInController extends GetxController {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-   DateTime currentTime = DateTime.now();
+  DateTime currentTime = DateTime.now();
 
   Future<void> signInWithGoogle() async {
     final GetDeviceTokenController getDeviceTokenController =
         Get.put(GetDeviceTokenController());
-         String formattedDateTime = DateFormat('dd/MM/yyyy - h:mma').format(currentTime);
+    String formattedDateTime =
+        DateFormat('dd/MM/yyyy - h:mma').format(currentTime);
     try {
       final GoogleSignInAccount? googleSignInAccount =
           await googleSignIn.signIn();
@@ -49,7 +50,7 @@ class GoogleSignInController extends GetxController {
             final isAdmin = userData['isAdmin'] ?? false;
             EasyLoading.dismiss();
             if (isAdmin) {
-             // User is not admin, show error message
+              // User is not admin, show error message
               EasyLoading.showError("Error: Only users are allowed.");
               await _auth.signOut();
               await googleSignIn.signOut();
@@ -58,22 +59,25 @@ class GoogleSignInController extends GetxController {
               Get.offAll(() => HomePageView());
             }
           } else {
+             final time = DateTime.now().millisecondsSinceEpoch.toString();
             UserModel userModel = UserModel(
-              lastName: '',
+                lastName: '',
                 city: '',
-                          Gender: '',
-                           language: 'English',
-          dateOfBirth: '',
-          updatedOn: DateTime.now(),
+                Gender: '',
+                language: 'English',
+                dateOfBirth: '',
+                updatedOn: DateTime.now(),
                 country: '',
+                isOnline: false,
                 createdOn: DateTime.now(),
                 email: user.email.toString(),
                 isAdmin: false,
                 isActive: true,
                 phone: user.phoneNumber.toString(),
-                    joinedTime: formattedDateTime,
-          updatedTime: formattedDateTime,
+                joinedTime: formattedDateTime,
+                updatedTime: formattedDateTime,
                 street: '',
+                lastActive: time,
                 uid: user.uid,
                 userAddress: '',
                 userDeviceToken:

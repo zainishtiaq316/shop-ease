@@ -10,6 +10,8 @@ class UserModel {
   final String userAddress;
   final String street;
   final String Gender;
+  late bool isOnline;
+  late String lastActive;
   final String language;
   final String dateOfBirth;
   final bool isAdmin;
@@ -21,6 +23,8 @@ class UserModel {
   final dynamic updatedTime;
   UserModel(
       {required this.Gender,
+      required this.isOnline,
+      required this.lastActive,
       required this.dateOfBirth,
       required this.language,
       required this.updatedOn,
@@ -48,9 +52,10 @@ class UserModel {
       'lastName': lastName,
       'email': email,
       'phone': phone,
-      'language' :language,
-      'gender' : Gender,
-      'dateOfBirth' : dateOfBirth,
+      'language': language,
+      'gender': Gender,
+      'dateOfBirth': dateOfBirth,
+      'is_online': isOnline,
       'userImg': userImg,
       'joinedTime': joinedTime,
       'userDeviceToken': userDeviceToken,
@@ -58,11 +63,12 @@ class UserModel {
       'userAddress': userAddress,
       'street': street,
       'city': city,
+      'last_active': lastActive,
       'isAdmin': isAdmin,
       'isActive': isActive,
       'createdOn': createdOn,
-      'updatedOn' : updatedOn,
-      'updatedTime' : updatedTime,
+      'updatedOn': updatedOn,
+      'updatedTime': updatedTime,
     };
   }
 
@@ -71,22 +77,24 @@ class UserModel {
         country: json['uid'],
         createdOn: json['createdOn'],
         city: json['city'],
-        Gender : json['gender'],
-        language : json['language'],
+        Gender: json['gender'],
+        language: json['language'],
         email: json['email'],
         dateOfBirth: json['dateOfBirth'],
         isAdmin: json['isAdmin'],
         isActive: json['isActive'],
         phone: json['phone'],
+        lastActive: json['last_active'],
         street: json['street'],
         uid: json['uid'],
-        updatedOn:json['updatedOn'],
+        isOnline: json['is_online'],
+        updatedOn: json['updatedOn'],
         userAddress: json['userAddress'],
         userDeviceToken: json['userDeviceToken'],
         userImg: json['userImg'],
         firstName: json['firstName'],
-        updatedTime : json['updatedTime'],
-        joinedTime : json['joinedTime'],
+        updatedTime: json['updatedTime'],
+        joinedTime: json['joinedTime'],
         lastName: json['lastName']);
   }
 }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shopease/helper/my-date-utils.dart';
 import 'package:shopease/main.dart';
 import 'package:shopease/models/chat-user.dart';
+import 'package:shopease/models/user-model.dart';
+import 'package:shopease/screens/chat-panel/chat-screen.dart';
 
 import '../api/apis.dart';
 
@@ -12,7 +14,7 @@ import '../models/message.dart';
 
 //card to represent a single user in home screen
 class ChatUserCard extends StatefulWidget {
-  final ChatUser user;
+  final UserModel user;
 
   const ChatUserCard({super.key, required this.user});
 
@@ -51,16 +53,16 @@ class _ChatUserCardState extends State<ChatUserCard> {
                 //user profile picture
                 leading: InkWell(
                   onTap: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) => ProfileDialog(user: widget.user));
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (_) => ProfileDialog(user: widget.user));
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(mq.height * .03),
                     child: CachedNetworkImage(
                       width: mq.height * .055,
                       height: mq.height * .055,
-                      imageUrl: widget.user.image,
+                      imageUrl: widget.user.userImg,
                       fit: BoxFit.cover,
                       errorWidget: (context, url, error) => const CircleAvatar(
                           child: Icon(CupertinoIcons.person)),
@@ -69,7 +71,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                 ),
 
                 //user name
-                title: Text(widget.user.name),
+                title: Text("${widget.user.firstName} ${widget.user.lastName}"),
 
                 //last message
                 subtitle: Text(
@@ -77,7 +79,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                         ? _message!.type == Type.image
                             ? 'image'
                             : _message!.msg
-                        : widget.user.about,
+                        : widget.user.Gender,
                     maxLines: 1),
 
                 //last message time

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:shopease/controllers/favourite-controller.dart';
 import 'package:shopease/screens/auth-ui/splash-screen.dart';
+import 'package:shopease/screens/chat-panel/chat-home-screen.dart';
 import 'package:shopease/screens/favourite/favourite-screen.dart';
 import 'package:shopease/screens/user-panel/home-page-cart.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
@@ -69,10 +70,7 @@ class _HomePageViewState extends State<HomePageView> {
     const List<Widget> _widgetOptions = <Widget>[
       MainScreen(),
       HomeCartScreen(),
-      Text(
-        'Search',
-        style: optionStyle,
-      ),
+      ChatHomeScreen(),
       ProfileScreen(),
     ];
 
@@ -96,7 +94,7 @@ class _HomePageViewState extends State<HomePageView> {
                   : _selectedIndex == 1
                       ? 'Cart'
                       : _selectedIndex == 2
-                          ? 'Search'
+                          ? 'Chats'
                           : 'Profile',
               style: TextStyle(color: AppConstant.appTextColor),
             ),
@@ -177,8 +175,8 @@ class _HomePageViewState extends State<HomePageView> {
                     iconColor: Colors.white,
                   ),
                   GButton(
-                    icon: Icons.search,
-                    text: 'Search',
+                    icon: Icons.chat,
+                    text: 'Chats',
                     iconColor: Colors.white,
                   ),
                   GButton(
