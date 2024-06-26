@@ -209,6 +209,7 @@ class APIs {
     await ref.doc(time).set(message.toJson()).then((value) =>
         sendPushNotification(chatUser, type == Type.text ? msg : 'image'));
   }
+  
 
   //update read status of message
   static Future<void> updateMessageReadStatus(Message message) async {
