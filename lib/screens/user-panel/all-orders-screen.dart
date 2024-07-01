@@ -104,7 +104,10 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                               productData['productTotalPrice'].toString(),
                             ),
                             customerId: productData['customerId'],
-                            customerAddress: productData['customerAddress'],
+                            customerStreet: productData['customerStreet'],
+                            customerCity : productData ['customerCity'],
+                            customerCountry : productData ['customerCountry'],
+                            customerZipCode : productData['customerZipCode'],
                             customerDeviceToken:
                                 productData['customerDeviceToken'],
                             customerName: productData['customerName'],

@@ -17,7 +17,10 @@ class OrderModel {
   final bool status;
   final String customerName;
   final String customerPhone;
-  final String customerAddress;
+  final String customerStreet;
+  final String customerCity;
+  final String customerCountry;
+  final String customerZipCode;
   final String customerDeviceToken;
 
   OrderModel(
@@ -34,12 +37,15 @@ class OrderModel {
       required this.productQuantity,
       required this.productTotalPrice,
       required this.salePrice,
-      required this.customerAddress,
+      required this.customerStreet,
       required this.customerDeviceToken,
       required this.customerId,
+      required this.customerCity,
+      required this.customerCountry,
       required this.customerName,
       required this.customerPhone,
       required this.status,
+      required this.customerZipCode,
       required this.updatedAt});
 
   Map<String, dynamic> toMap() {
@@ -62,7 +68,10 @@ class OrderModel {
       'status': status,
       'customerName': customerName,
       'customerPhone': customerPhone,
-      'customerAddress': customerAddress,
+      'customerCountry' : customerCountry,
+      'customerStreet': customerStreet,
+      'customerCity' : customerCity,
+      'customerZipCode' : customerZipCode,
       'customerDeviceToken': customerDeviceToken
     };
   }
@@ -85,9 +94,12 @@ class OrderModel {
         updatedAt: json["updatedAt"],
         customerId: json['customerId'],
         status: json['status'],
+        customerCountry : json['customerCountry'],
+        customerCity : json['customerCity'],
         customerName: json['customerName'],
         customerPhone: json['customerPhone'],
-        customerAddress: json['customerAddress'],
+        customerStreet: json['customerStreet'],
+        customerZipCode : json['customerZipCode'],
         customerDeviceToken: json['customerDeviceToken']);
   }
 }

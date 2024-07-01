@@ -94,7 +94,86 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               }
               if (snapshot.data != null) {
                 return Container(
-                    child: ListView.builder(
+                    child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey)),
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Awesome Text',
+                              hintText: 'Enter something awesome',
+                              prefixIcon: Icon(Icons.star),
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {},
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.0)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.blue, width: 2.0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.0)),
+                              ),
+                              filled: true,
+                              fillColor:
+                                  Colors.lightBlueAccent.withOpacity(0.1),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter some text';
+                              }
+                              if (value.length < 3) {
+                                return 'Must be at least 3 characters long';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.height,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.green.shade500, width: 2),
+                          color: Colors.green.shade100,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                                width: MediaQuery.of(context).size.width * 0.1,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.05,
+                                child: Image.asset("assets/images/cash.png")),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            Text(
+                              "Cash on Delivery",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    ListView.builder(
                         itemCount: snapshot.data!.docs.length,
                         shrinkWrap: true,
                         physics: BouncingScrollPhysics(),
@@ -210,7 +289,18 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                                             FontWeight.w600),
                                                   ),
                                                 ),
-                                               ],
+                                                SizedBox(
+                                                  width: 10,
+                                                ),
+                                                Text(
+                                                  "x${cartModel.productQuantity}",
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                )
+                                              ],
                                             ),
                                           ],
                                         ),
@@ -219,14 +309,16 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                   ],
                                 ),
                               ));
-                        }));
+                        }),
+                  ],
+                ));
               }
 
               return Container();
             }),
       ),
       bottomNavigationBar: Container(
-        margin: EdgeInsets.only(bottom: 5.0),
+        margin: EdgeInsets.only(bottom: 5.0, left: 10, right: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

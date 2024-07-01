@@ -153,14 +153,15 @@ class APIs {
 
   
   
-  // for getting specific user info
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
-      UserModel chatUser) {
-    return firestore
-        .collection('users')
-        .where('id', isEqualTo: chatUser.uid)
-        .snapshots();
-  }
+// for getting specific user info
+static Stream<QuerySnapshot<Map<String, dynamic>>> getUserInfo(
+    UserModel chatUser) {
+  return firestore
+      .collection('users')
+      .where('id', isEqualTo: chatUser.uid)
+      .where('isAdmin', isEqualTo: true) // Ensure to check for admin status
+      .snapshots();
+}
 
   // update online or last active status of user
   static Future<void> updateActiveStatus(bool isOnline) async {

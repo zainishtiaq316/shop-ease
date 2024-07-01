@@ -53,7 +53,10 @@ void placeOrder(
             status: false,
             customerName: customerName,
             customerPhone: customerPhone,
-            customerAddress: customerAddress,
+            customerStreet: customerAddress,
+            customerCity : customerAddress,
+            customerCountry : customerAddress,
+            customerZipCode:  customerAddress,
             customerDeviceToken: customerDeviceToken);
 
         for (var x = 0; x < documents.length; x++) {

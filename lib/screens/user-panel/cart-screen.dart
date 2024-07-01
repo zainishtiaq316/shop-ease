@@ -317,8 +317,9 @@ class _CartScreenState extends State<CartScreen> {
           
     
       bottomNavigationBar:   Container(
+        
             margin: EdgeInsets.only(bottom: 5.0),
-            padding: EdgeInsets.only(left: 10, right: 10),
+            padding: EdgeInsets.only(left: 10, right: 10,),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -329,11 +330,30 @@ class _CartScreenState extends State<CartScreen> {
                         fontWeight: FontWeight.bold, color: Colors.green),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 20),
                   child: GestureDetector(
                     onTap: () {
-                      Get.to(() => CheckOutScreen());
+                      // Check if the cart is empty
+                      FirebaseFirestore.instance
+                          .collection('cart')
+                          .doc(user!.uid)
+                          .collection('cartOrders')
+                          .get()
+                          .then((snapshot) {
+                        if (snapshot.docs.isEmpty) {
+                          // Show snackbar if the cart is empty
+                          Get.snackbar(
+                            'Cart is empty',
+                            'Please add items to the cart before proceeding to checkout',
+                            snackPosition: SnackPosition.BOTTOM,
+                           
+                          );
+                        } else {
+                          // Navigate to the CheckOutScreen if the cart is not empty
+                          Get.to(() => CheckOutScreen());
+                        }
+                      });
                     },
                     child: Container(
                       width: Get.width / 2.5,
@@ -361,7 +381,8 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                   ),
-                ),
+                )
+             
               ],
             ),
           )

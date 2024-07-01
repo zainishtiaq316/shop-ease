@@ -176,7 +176,7 @@ class _FlashSaleWidgetState extends State<FlashSaleWidget> {
                                               child: Row(
                                                 children: [
                                                   Text(
-                                                    'Rs ${productModel.salePrice}',
+                                                    'PKR ${productModel.salePrice}',
                                                     style: TextStyle(
                                                         fontSize: 12.0,
                                                         fontWeight:

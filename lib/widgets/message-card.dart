@@ -46,10 +46,10 @@ class _MessageCardState extends State<MessageCard> {
         Flexible(
           child: Container(
             padding: EdgeInsets.all(widget.message.type == Type.image
-                ? mq.width * .03
-                : mq.width * .04),
+                ? MediaQuery.of(context).size.width * .03
+                : MediaQuery.of(context).size.width * .04),
             margin: EdgeInsets.symmetric(
-                horizontal: mq.width * .04, vertical: mq.height * .01),
+                horizontal: MediaQuery.of(context).size.width * .04, vertical: MediaQuery.of(context).size.height * .01),
             decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 221, 245, 255),
                 border: Border.all(color: Colors.lightBlue),
@@ -85,7 +85,7 @@ class _MessageCardState extends State<MessageCard> {
 
         //message time
         Padding(
-          padding: EdgeInsets.only(right: mq.width * .04),
+          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * .04),
           child: Text(
             MyDateUtil.getFormattedTime(
                 context: context, time: widget.message.sent),
@@ -105,7 +105,7 @@ class _MessageCardState extends State<MessageCard> {
         Row(
           children: [
             //for adding some space
-            SizedBox(width: mq.width * .04),
+            SizedBox(width: MediaQuery.of(context).size.width * .04),
 
             //double tick blue icon for message read
             if (widget.message.read.isNotEmpty)
@@ -127,10 +127,10 @@ class _MessageCardState extends State<MessageCard> {
         Flexible(
           child: Container(
             padding: EdgeInsets.all(widget.message.type == Type.image
-                ? mq.width * .03
-                : mq.width * .04),
+                ? MediaQuery.of(context).size.width * .03
+                : MediaQuery.of(context).size.width * .04),
             margin: EdgeInsets.symmetric(
-                horizontal: mq.width * .04, vertical: mq.height * .01),
+                horizontal: MediaQuery.of(context).size.width * .04, vertical: MediaQuery.of(context).size.height * .01),
             decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 218, 255, 176),
                 border: Border.all(color: Colors.lightGreen),
@@ -181,7 +181,7 @@ class _MessageCardState extends State<MessageCard> {
               Container(
                 height: 4,
                 margin: EdgeInsets.symmetric(
-                    vertical: mq.height * .015, horizontal: mq.width * .4),
+                    vertical: MediaQuery.of(context).size.height * .015, horizontal: MediaQuery.of(context).size.width * .4),
                 decoration: BoxDecoration(
                     color: Colors.grey, borderRadius: BorderRadius.circular(8)),
               ),
@@ -231,8 +231,8 @@ class _MessageCardState extends State<MessageCard> {
               if (isMe)
                 Divider(
                   color: Colors.black54,
-                  endIndent: mq.width * .04,
-                  indent: mq.width * .04,
+                  endIndent: MediaQuery.of(context).size.width * .04,
+                  indent: MediaQuery.of(context).size.width * .04,
                 ),
 
               //edit option
@@ -263,8 +263,8 @@ class _MessageCardState extends State<MessageCard> {
               //separator or divider
               Divider(
                 color: Colors.black54,
-                endIndent: mq.width * .04,
-                indent: mq.width * .04,
+                endIndent: MediaQuery.of(context).size.width * .04,
+                indent: MediaQuery.of(context).size.width * .04,
               ),
 
               //sent time
@@ -365,9 +365,9 @@ class _OptionItem extends StatelessWidget {
         onTap: () => onTap(),
         child: Padding(
           padding: EdgeInsets.only(
-              left: mq.width * .05,
-              top: mq.height * .015,
-              bottom: mq.height * .015),
+              left: MediaQuery.of(context).size.width * .05,
+              top: MediaQuery.of(context).size.height * .015,
+              bottom: MediaQuery.of(context).size.height * .015),
           child: Row(children: [
             icon,
             Flexible(

@@ -11,6 +11,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:shopease/controllers/favourite-controller.dart';
 import 'package:shopease/models/cart-model.dart';
 import 'package:shopease/models/product-model.dart';
+import 'package:shopease/models/user-model.dart';
+import 'package:shopease/screens/chat-panel/chat-screen.dart';
 import 'package:shopease/screens/user-panel/cart-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 import 'package:shopease/widgets/favourite-button.dart';
@@ -177,7 +179,93 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               ),
                             ),
                           ],
-                        ))
+                        )),
+                    StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                        stream: FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(user?.uid)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                                child: CircularProgressIndicator(
+                              color: appColor,
+                            )); // Loading indicator while fetching data
+                          } else if (snapshot.hasError) {
+                            return Text('Error: ${snapshot.error}');
+                          } else {
+                            Map<String, dynamic>? userData =
+                                snapshot.data?.data();
+                            String? firstName = userData?['firstName'];
+                            String? SecondName = userData?['lastName'];
+                            String? email = userData?['email'];
+                            String? dateOfBirth = userData?['dateOfBirth'];
+                            String? gender = userData?['gender'];
+                            String? phone = userData?['phone'];
+                            bool ? isOnline = userData?['is_online'];
+                            String ? last_active = userData?['last_active'];
+                            String? language = userData?['language'];
+                            String uid = userData?['uid'];
+                            String userImg = userData?['userImg'];
+                            String userDeviceToken = userData?['userDeviceToken'];
+                            String userAddress = userData?['userAddress'];
+                            dynamic updatedTime = userData?['updatedTime'];
+                            dynamic updatedOn = userData?['updatedOn'];
+                            String street = userData?['street'];
+                            bool isActive = userData?['isActive'];
+                            bool isAdmin = userData?['isAdmin'];
+                            String city = userData?['city'];
+                            dynamic createdOn = userData?['createdOn'];
+                            String country = userData?['country'];
+                            dynamic joinedTime = userData?['joinedTime'];
+
+                            return Material(
+                              child: Container(
+                                width: Get.width / 3.0,
+                                height: Get.height / 16,
+                                decoration: BoxDecoration(
+                                    color: AppConstant.appSecondaryColor,
+                                    borderRadius: BorderRadius.circular(20.0)),
+                                child: TextButton(
+                                  onPressed: () async {
+                                    Get.to(() => ChatScreen(
+                                          user: UserModel(
+                                              Gender: gender!,
+                                              isOnline: isOnline!,
+                                              lastActive: last_active!,
+                                              dateOfBirth: dateOfBirth!,
+                                              language: language!,
+                                              updatedOn: updatedOn,
+                                              updatedTime: updatedTime,
+                                              joinedTime: joinedTime,
+                                              country: country,
+                                              createdOn: createdOn,
+                                              email: email!,
+                                              city: city,
+                                              isAdmin: isAdmin,
+                                              isActive: isActive,
+                                              phone: phone!,
+                                              lastName: SecondName!,
+                                              street: street,
+                                              uid: uid,
+                                              userAddress: userAddress,
+                                              userDeviceToken: userDeviceToken,
+                                              userImg: userImg,
+                                              firstName: firstName!),
+                                        ));
+                                  },
+                                  child: Text(
+                                    "Chat",
+                                    style: TextStyle(
+                                      color: AppConstant.appTextColor,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        }),
                   ],
                 ),
               ),

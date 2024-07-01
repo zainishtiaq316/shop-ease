@@ -1,19 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:get/get.dart';
-import 'package:image_card/image_card.dart';
 import 'package:shopease/models/cart-model.dart';
-import 'package:shopease/models/product-model.dart';
 import 'package:shopease/screens/user-panel/checkout-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 import '../../controllers/cart-price-controller.dart';
-import 'product-detail-screen.dart';
 
 class HomeCartScreen extends StatefulWidget {
   const HomeCartScreen({super.key});
@@ -66,7 +61,7 @@ class _CartScreenState extends State<HomeCartScreen> {
                     return ListView.builder(
                         itemCount: snapshot.data!.docs.length,
                         shrinkWrap: true,
-                         physics: BouncingScrollPhysics(),
+                        physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           final productData = snapshot.data!.docs[index];
                           CartModel cartModel = CartModel(
@@ -306,7 +301,26 @@ class _CartScreenState extends State<HomeCartScreen> {
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   child: GestureDetector(
                     onTap: () {
-                      Get.to(() => CheckOutScreen());
+                      // Check if the cart is empty
+                      FirebaseFirestore.instance
+                          .collection('cart')
+                          .doc(user!.uid)
+                          .collection('cartOrders')
+                          .get()
+                          .then((snapshot) {
+                        if (snapshot.docs.isEmpty) {
+                          // Show snackbar if the cart is empty
+                          Get.snackbar(
+                            'Cart is empty',
+                            'Please add items to the cart before proceeding to checkout',
+                            snackPosition: SnackPosition.BOTTOM,
+                           
+                          );
+                        } else {
+                          // Navigate to the CheckOutScreen if the cart is not empty
+                          Get.to(() => CheckOutScreen());
+                        }
+                      });
                     },
                     child: Container(
                       width: Get.width / 2.5,
@@ -334,11 +348,10 @@ class _CartScreenState extends State<HomeCartScreen> {
                       ),
                     ),
                   ),
-                ),
+                )
               ],
             ),
           )
-        
         ],
       ),
     );

@@ -168,7 +168,7 @@ class _AccountInfoState extends State<AccountInfo> {
                                   color: Colors.white,
                                   thickness: 2,
                                 ),
-                                info("UserName", "${firstName??""}${SecondName??""}"),
+                                info("UserName", "${firstName??""} ${SecondName??""}"),
                                 info("Email", "${email??""}"),
                                 info("Phone", "${phone??""}"),
                                   info("Address", "${street??""}, ${city??""}, ${country??""}"),
