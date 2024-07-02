@@ -49,18 +49,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             Navigator.of(context).pop();
           },
         ),
-        actions: [
-          GestureDetector(
-            onTap: () => productPriceController.deleteAllCarts(),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.delete,
-                color: Colors.white,
-              ),
-            ),
-          )
-        ],
+       
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -98,48 +88,30 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.4,
+                      height: MediaQuery.of(context).size.height * 0.15,
                       decoration: BoxDecoration(
                           color: Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey)),
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Awesome Text',
-                              hintText: 'Enter something awesome',
-                              prefixIcon: Icon(Icons.star),
-                              suffixIcon: IconButton(
-                                icon: Icon(Icons.clear),
-                                onPressed: () {},
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.0)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.blue, width: 2.0),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12.0)),
-                              ),
-                              filled: true,
-                              fillColor:
-                                  Colors.lightBlueAccent.withOpacity(0.1),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              if (value.length < 3) {
-                                return 'Must be at least 3 characters long';
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
+                          border: Border.all(
+                              color: Colors.grey.shade300, width: 2)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Shipping Address : " , style: TextStyle(fontWeight: FontWeight.bold),),
+                            SizedBox(height: 10,),
+
+                            Container(width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height*0.07,
+                         decoration: BoxDecoration(   borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.black)),
+                            )
+                          ],
+                        ),
                       ),
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Container(
                       width: MediaQuery.of(context).size.height,
