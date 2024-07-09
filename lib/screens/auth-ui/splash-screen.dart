@@ -44,9 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     final Size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: AppConstant.appSecondaryColor,
+      backgroundColor: appColor,
       appBar: AppBar(
-        backgroundColor: AppConstant.appSecondaryColor,
+        backgroundColor: appColor,
         elevation: 0,
       ),
       body: Container(
@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Container(
               width: Get.width,
               alignment: Alignment.center,
-              child: Lottie.asset('assets/images/splash-icon.json'),
+              child: Lottie.asset('assets/images/splash-icon.json',repeat: false),
             ),
           ),
           Container(

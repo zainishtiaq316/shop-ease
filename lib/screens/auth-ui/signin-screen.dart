@@ -30,15 +30,8 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return KeyboardVisibilityBuilder(builder: (context, isKeyboardVisible) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppConstant.appSecondaryColor,
-          title: Text(
-            "Sign In",
-            style: TextStyle(color: AppConstant.appTextColor),
-          ),
-          centerTitle: true,
-          elevation: 0,
-        ),
+               backgroundColor: Colors.white,
+       
         body: SingleChildScrollView(
           child: Container(
             child: Column(
@@ -46,31 +39,54 @@ class _SignInScreenState extends State<SignInScreen> {
                 isKeyboardVisible
                     ? Column(
                         children: [
+                        
                           SizedBox(
                             height: Get.height / 20,
                           ),
                           Text(
-                            "Welcome to app",
+                            "Welcome to Shop Ease",
                             style: TextStyle(
-                                color: AppConstant.appSecondaryColor,
+                                color: appColor,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold),
                           ),
+                          Container(
+                               height: Get.height /4,
+                              
+                              child: Lottie.asset(
+                                  "assets/images/splash-icon.json", ),
+                            ),
                         ],
                       )
                     :
 
                     // SizedBox.shrink():
-                    Column(
-                        children: [
-                          Container(
-                              width: Get.width,
-                              height: Get.height / 3,
-                              color: AppConstant.appSecondaryColor,
+                    Container(
+                        width: Get.width,
+                        height: Get.height /2.5,
+                        decoration: BoxDecoration(
+                          color: appColor,
+                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(100))
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                               height: Get.height /3,
                               child: Lottie.asset(
-                                  "assets/images/splash-icon.json"))
-                        ],
-                      ),
+                                  "assets/images/splash-icon.json"),
+                            ),
+                            Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 15, bottom: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text("Login Account", style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold,),)
+                                ],
+                              ),
+                            )
+                          ],
+                        )),
                 SizedBox(
                   height: Get.height / 20,
                 ),

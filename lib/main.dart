@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_notification_channel/flutter_notification_channel.dart';
 import 'package:flutter_notification_channel/notification_importance.dart';
 import 'package:get/get.dart';
+import 'package:shopease/screens/auth-ui/splash-screen.dart';
 
 import 'firebase_options.dart';
 import 'screens/auth-ui/welcome-screen.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
      
-      home: WelcomeScreen(),
+      home: SplashScreen(),
       builder: EasyLoading.init(),
     );
   }
