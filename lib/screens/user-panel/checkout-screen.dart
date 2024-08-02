@@ -30,9 +30,11 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   final ProductPriceController productPriceController =
       Get.put(ProductPriceController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: appColor,
         surfaceTintColor: appColor,
@@ -49,109 +51,319 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             Navigator.of(context).pop();
           },
         ),
-       
-        
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('cart')
-                .doc(user!.uid)
-                .collection('cartOrders')
-                .snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text("Error"),
-                );
-              }
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('cart')
+                  .doc(user!.uid)
+                  .collection('cartOrders')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text("Error"),
+                  );
+                }
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  height: Get.height / 5,
-                  child: Center(
-                    child: CupertinoActivityIndicator(),
-                  ),
-                );
-              }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container(
+                    height: Get.height / 5,
+                    child: Center(
+                      child: CupertinoActivityIndicator(),
+                    ),
+                  );
+                }
 
-              if (snapshot.data!.docs.isEmpty) {
-                return Center(
-                  child: Text("No products found"),
-                );
-              }
-              if (snapshot.data != null) {
-                return Container(
-                    child: Column(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.15,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: Colors.grey.shade300, width: 2)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Shipping Address : " , style: TextStyle(fontWeight: FontWeight.bold),),
-                            SizedBox(height: 10,),
-
-                            Container(width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height*0.07,
-                         decoration: BoxDecoration(   borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.black)),
-                            )
-                          ],
-                        ),
+                if (snapshot.data!.docs.isEmpty) {
+                  return Center(
+                    child: Text("No products found"),
+                  );
+                }
+                if (snapshot.data != null) {
+                  return Container(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 15,
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.height,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.green.shade500, width: 2),
-                          color: Colors.green.shade100,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 5.0),
+                          padding: EdgeInsets.all(10.0),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              color: Colors.green.shade500,
+                              border:
+                                  Border.all(color: Colors.green, width: 0.2),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 35,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Add Shipping Address",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 13),
+                              )
+                            ],
+                          )),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Container(
-                                width: MediaQuery.of(context).size.width * 0.1,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.05,
-                                child: Image.asset("assets/images/cash.png")),
-                            SizedBox(
-                              width: 30,
-                            ),
                             Text(
-                              "Cash on Delivery",
+                              "Shipping Information ",
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Spacer(),
+                            Container(
+                              padding: EdgeInsets.only(
+                                  left: 8, right: 8, top: 5, bottom: 5),
+                              decoration: BoxDecoration(
+                                  color: Colors.green.shade400,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Text(
+                                "Edit",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
                             )
                           ],
                         ),
                       ),
-                    ),
-                    ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        shrinkWrap: true,
-                        physics: BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final productData = snapshot.data!.docs[index];
-                          CartModel cartModel = CartModel(
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 5.0),
+                        padding: EdgeInsets.all(10.0),
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            border: Border.all(color: Colors.grey, width: 0.2),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "Name : ",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "Zain Ishtiaq",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 13),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Phone : ",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  "+923028163676",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 13),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Street : ",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "Madinah Street Mangla Road",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "City : ",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "Dina",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Country : ",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "Pakistan",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Zip Code : ",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    "49400",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Order Summary ",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 5.0),
+                        padding: EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 3,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ListView.separated(
+                          itemCount: snapshot.data!.docs.length,
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          separatorBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Divider(
+                                color: Colors.grey.shade300,
+                                thickness: 1.0,
+                              ),
+                            );
+                          },
+                          itemBuilder: (context, index) {
+                            final productData = snapshot.data!.docs[index];
+                            CartModel cartModel = CartModel(
                               categoryId: productData['categoryId'],
                               categoryName: productData['categoryName'],
                               createdAt: productData['createdAt'],
@@ -167,127 +379,158 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                               updatedAt: productData['updatedAt'],
                               productQuantity: productData['productQuantity'],
                               productTotalPrice: double.parse(
-                                  productData['productTotalPrice'].toString()));
+                                  productData['productTotalPrice'].toString()),
+                            );
 
-                          //CALCULATE PRICE
+                            // CALCULATE PRICE
+                            productPriceController.fetchProductPrice();
 
-                          productPriceController.fetchProductPrice();
-                          return SwipeActionCell(
-                              key: ObjectKey(cartModel.productId),
-                              trailingActions: [
-                                SwipeAction(
-                                    title: "Delete",
-                                    forceAlignmentToBoundary: true,
-                                    performsFirstActionWithFullSwipe: true,
-                                    onTap: (CompletionHandler handler) async {
-                                      await FirebaseFirestore.instance
-                                          .collection('cart')
-                                          .doc(user!.uid)
-                                          .collection('cartOrders')
-                                          .doc(cartModel.productId)
-                                          .delete();
-                                      print("deleted");
-                                    })
-                              ],
-                              child: Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 5.0),
-                                padding: EdgeInsets.all(10.0),
-                                decoration: BoxDecoration(
-                                  color: AppConstant.appTextColor,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 3,
-                                      blurRadius: 5,
-                                      offset: Offset(0, 3),
+                            return Container(
+                              padding: EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.25,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.25,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      image: DecorationImage(
+                                        image: NetworkImage(
+                                            cartModel.productImages[0]),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                  ],
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.25,
+                                  ),
+                                  SizedBox(width: 10.0),
+                                  Expanded(
+                                    child: Container(
                                       height:
                                           MediaQuery.of(context).size.width *
                                               0.25,
-                                      decoration: BoxDecoration(
-                                        color: appColor,
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        image: DecorationImage(
-                                          image: NetworkImage(
-                                              cartModel.productImages[0]),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10.0),
-                                    Expanded(
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.25,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(
-                                              cartModel.productName,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.black,
-                                                fontSize: 17.0,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(
+                                            cartModel.productName,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black87,
+                                              fontSize: 18.0,
+                                            ),
+                                          ),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'PKR ${cartModel.productTotalPrice.toString()}',
+                                                style: TextStyle(
+                                                  color: Colors.green.shade700,
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                               ),
-                                            ),
-                                            Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  child: Text(
-                                                    'PKR ${cartModel.productTotalPrice.toString()}',
-                                                    style: TextStyle(
-                                                        color: Colors.green,
-                                                        fontSize: 13.0,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
+                                              SizedBox(width: 10.0),
+                                              Text(
+                                                "x${cartModel.productQuantity}",
+                                                style: TextStyle(
+                                                  color: Colors.black54,
+                                                  fontSize: 14.0,
+                                                  fontWeight: FontWeight.w500,
                                                 ),
-                                                SizedBox(
-                                                  width: 10,
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.timer,
+                                                color: Colors.orange,
+                                                size: 16.0,
+                                              ),
+                                              SizedBox(width: 5.0),
+                                              Text(
+                                                'Delivery: ${cartModel.deliveryTime}',
+                                                style: TextStyle(
+                                                  color: Colors.black54,
+                                                  fontSize: 14.0,
                                                 ),
-                                                Text(
-                                                  "x${cartModel.productQuantity}",
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w400),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ));
-                        }),
-                  ],
-                ));
-              }
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Payment Method",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 5.0),
+                        padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade100,
+                          borderRadius: BorderRadius.circular(15.0),
+                          
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 25,
+                              child: Image.asset("assets/images/cash.png"),
+                            ),
 
-              return Container();
-            }),
+                            SizedBox(width: 10,),
+                            Text("Cash On Delivery", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),),
+
+                            Spacer(),
+
+                            Icon(Icons.check_circle, color: Colors.green.shade500,)
+                          ],
+                        )),
+                    ],
+                  ));
+                }
+
+                return Container();
+              }),
+        ),
       ),
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(bottom: 5.0, left: 10, right: 10),
