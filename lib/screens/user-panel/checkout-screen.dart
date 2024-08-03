@@ -4,12 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:get/get.dart';
 import 'package:image_card/image_card.dart';
 import 'package:shopease/controllers/get-customer-device-controller.dart';
 import 'package:shopease/models/cart-model.dart';
 import 'package:shopease/models/product-model.dart';
+import 'package:shopease/screens/user-panel/add-shipping-details.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 import '../../controllers/cart-price-controller.dart';
@@ -31,6 +33,19 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   final ProductPriceController productPriceController =
       Get.put(ProductPriceController());
 
+ String selectedOption = '';
+
+ void selectOption(String option) {
+    setState(() {
+      selectedOption = option;
+    });
+
+    // Print the selected option to the console
+    print('Selected Payment Option: $option');
+
+    
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,16 +146,21 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Spacer(),
-                            Container(
-                              padding: EdgeInsets.only(
-                                  left: 8, right: 8, top: 5, bottom: 5),
-                              decoration: BoxDecoration(
-                                  color: Colors.green.shade400,
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Text(
-                                "Edit",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14),
+                            GestureDetector(
+                              onTap: (){
+                                Get.to(()=>ShippingDetails());
+                              },
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                    left: 8, right: 8, top: 5, bottom: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.green.shade400,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Text(
+                                  "Edit",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                ),
                               ),
                             )
                           ],
@@ -499,31 +519,26 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       SizedBox(
                         height: 5,
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 5.0),
-                        padding: EdgeInsets.only(left: 10, right: 10, top: 15, bottom: 15),
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade100,
-                          borderRadius: BorderRadius.circular(15.0),
-                          
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 25,
-                              child: Image.asset("assets/images/cash.png"),
-                            ),
 
-                            SizedBox(width: 10,),
-                            Text("Cash On Delivery", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),),
 
-                            Spacer(),
-
-                            Icon(Icons.check_circle, color: Colors.green.shade500,)
-                          ],
-                        )),
+                      
+                    PaymentOption(
+            option: 'Cash On Delivery',
+            imagePath: 'assets/images/cash.png',
+            isSelected: selectedOption == 'Cash On Delivery',
+            onSelect: () => selectOption('Cash On Delivery'),
+            backgroundColor: Colors.green.shade100,
+            textColor: Colors.green.shade900,
+          ),
+          PaymentOption(
+            option: 'RazorPay',
+            imagePath: 'assets/images/razorpay.png',
+            isSelected: selectedOption == 'RazorPay',
+            onSelect: () => selectOption('RazorPay'),
+            backgroundColor: Colors.blue.shade100,
+            textColor: Colors.blue.shade900,
+          ),
+                   
                     ],
                   ));
                 }
@@ -666,5 +681,67 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         isDismissible: true,
         enableDrag: true,
         elevation: 6);
+  }
+}
+
+class PaymentOption extends StatelessWidget {
+  final String option;
+  final String imagePath;
+  final bool isSelected;
+  final VoidCallback onSelect;
+  final Color backgroundColor;
+  final Color textColor;
+
+  PaymentOption({
+    required this.option,
+    required this.imagePath,
+    required this.isSelected,
+    required this.onSelect,
+    required this.backgroundColor,
+    required this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onSelect,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+        padding: EdgeInsets.all(15.0),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(15.0),
+          border: Border.all(
+            color: isSelected ? textColor : Colors.transparent,
+            width: 2.0,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 25,
+              height: 25,
+              child: Image.asset(imagePath),
+            ),
+            SizedBox(width: 10),
+            Text(
+              option,
+              style: TextStyle(
+                color: textColor,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Spacer(),
+            isSelected ?
+            Icon(
+              Icons.check_circle,
+              color: isSelected ? textColor : Colors.grey,
+            ) : SizedBox.shrink(),
+          ],
+        ),
+      ),
+    );
   }
 }
