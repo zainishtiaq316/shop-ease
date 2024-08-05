@@ -4,17 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:shopease/models/order-model.dart';
+import 'package:shopease/screens/home_page.dart';
 import 'package:shopease/screens/user-panel/main-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 import 'generate-order-id-service.dart';
 
 void placeOrder(
-    {required BuildContext context,
+    {
+      
+    required BuildContext context,
     required String customerName,
+    required String customerPhone,
+    required String customerStreet,
+    required String customerCity,
+    required String customerZipCode,
+    required String customerCountry,
+
     required String customerAddress,
+
+    required String price,
+    required String paymentMethod,
+    required bool paymentStatus,
     required String customerDeviceToken,
-    required String customerPhone}) async {
+    }) async {
   final user = FirebaseAuth.instance.currentUser;
   EasyLoading.show(status: "Please Wait .");
   if (user != null) {
@@ -53,17 +66,20 @@ void placeOrder(
             status: false,
             customerName: customerName,
             customerPhone: customerPhone,
-            customerStreet: customerAddress,
-            customerCity : customerAddress,
-            customerCountry : customerAddress,
-            customerZipCode:  customerAddress,
+            customerStreet: customerStreet,
+            customerCity : customerCity,
+            customerCountry : customerCountry,
+            customerZipCode:  customerZipCode,
+            customerAddress: customerAddress,
+            paymentMethod: paymentMethod,
+            paymentStatus: paymentStatus,
             customerDeviceToken: customerDeviceToken);
 
         for (var x = 0; x < documents.length; x++) {
           await FirebaseFirestore.instance
               .collection('orders')
               .doc(user.uid)
-              .set({
+              .update({
             'uId': user.uid,
             'customerDeviceToken': customerDeviceToken,
             'orderStatus': false,
@@ -94,12 +110,12 @@ void placeOrder(
       }
       print("Order Confirmed");
       Get.snackbar("Order Confirmed", "Thank you for your order!",
-          backgroundColor: AppConstant.appMainColor,
+          backgroundColor: Colors.green.shade400,
           colorText: Colors.white,
-          duration: Duration(seconds: 5));
+          duration: Duration(seconds: 2));
 
           EasyLoading.dismiss();
-          Get.offAll(()=> MainScreen());
+          Get.offAll(()=> HomePageView());
     } catch (e) {
       print("Error $e");
     }

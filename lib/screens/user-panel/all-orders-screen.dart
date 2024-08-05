@@ -112,7 +112,11 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                 productData['customerDeviceToken'],
                             customerName: productData['customerName'],
                             customerPhone: productData['customerPhone'],
-                            status: productData['status']);
+                            status: productData['status'],
+                             customerAddress :productData['customerAddress'],
+        paymentMethod : productData['paymentMethod'],
+        paymentStatus : productData['paymentStatus'],
+                            );
 
                         //CALCULATE PRICE
 

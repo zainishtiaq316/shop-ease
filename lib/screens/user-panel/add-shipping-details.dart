@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:shopease/screens/user-panel/checkout-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
 
 class ShippingDetails extends StatefulWidget {
@@ -22,39 +20,73 @@ class _ShippingDetailsState extends State<ShippingDetails> {
   final TextEditingController _streetController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _zipcodeController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
   final user = FirebaseAuth.instance.currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchShippingDetails();
+    _countryController.text = 'Pakistan';
+  }
+
+  Future<void> _fetchShippingDetails() async {
+    if (user != null) {
+      DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore
+          .instance
+          .collection('orders')
+          .doc(user!.uid)
+          .get();
+      if (doc.exists) {
+        setState(() {
+          var data = doc.data() as Map<String, dynamic>;
+          _nameController.text = data['customerName'] ?? '';
+          _phoneController.text =
+              data['customerPhone']?.replaceFirst('+92 ', '') ?? '';
+          _streetController.text = data['street'] ?? '';
+          _cityController.text = data['city'] ?? '';
+          _zipcodeController.text = data['zipCode'] ?? '';
+          _countryController.text = data['country'] ?? '';
+        });
+      }
+    }
+  }
 
   Future<void> _submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
-       EasyLoading.show(status: "Please Wait .");
-      if(user !=null){
+      EasyLoading.show(status: "Please Wait .");
+      if (user != null) {
         try {
-        await FirebaseFirestore.instance
-            .collection('orders')
-            .doc(user!.uid)
-            .set({
-          'uId': user!.uid,
-          'customerName': _nameController.text.trim(),
-          'customerPhone': '+92 ${_phoneController.text.trim()}',
-          'customerAddress':
-              "${_streetController.text.trim()}, ${_cityController.text.trim()}, Pakistan, ${_zipcodeController.text.trim()}",
-          'createdAt': DateTime.now(),
-        });
-        print("Address Added");
-      Get.snackbar("Address Added","Please Select Payment then CheckOut",
-          backgroundColor: Colors.grey.shade300,
-          colorText: Colors.black,
-          duration: Duration(seconds: 2));
+          await FirebaseFirestore.instance
+              .collection('orders')
+              .doc(user!.uid)
+              .set({
+            'uId': user!.uid,
+            'customerName': _nameController.text.trim(),
+            'customerPhone': '+92 ${_phoneController.text.trim()}',
+            'customerAddress':
+                "${_streetController.text.trim()}, ${_cityController.text.trim()}, Pakistan, ${_zipcodeController.text.trim()}",
+            'street': _streetController.text.trim(),
+            'city': _cityController.text.trim(),
+            'country': _countryController.text,
+            'zipCode': _zipcodeController.text.trim(),
+            'createdAt': DateTime.now(),
+          });
+          print("Address Added");
+          Get.snackbar("Address Added", "Please Select Payment then CheckOut",
+              backgroundColor: Colors.grey.shade300,
+              colorText: Colors.black,
+              duration: Duration(seconds: 2));
 
           EasyLoading.dismiss();
           Navigator.pop(context);
-      } catch (e) {
-        // Handle errors
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
-        print('Error adding document: $e');
-      }
+        } catch (e) {
+          // Handle errors
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: $e')),
+          );
+          print('Error adding document: $e');
+        }
       }
     }
   }
@@ -96,6 +128,10 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
+                  onSaved: (value) {
+                    //new
+                    _nameController.text = value!;
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a name';
@@ -115,6 +151,10 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
+                  onSaved: (value) {
+                    //new
+                    _phoneController.text = value!;
+                  },
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -135,6 +175,10 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
+                  onSaved: (value) {
+                    //new
+                    _streetController.text = value!;
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a street';
@@ -153,6 +197,10 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
+                  onSaved: (value) {
+                    //new
+                    _cityController.text = value!;
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter a city';
@@ -164,7 +212,7 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
-                  initialValue: 'Pakistan',
+                  initialValue: _countryController.text,
                   decoration: InputDecoration(
                     labelText: "Country",
                     border: OutlineInputBorder(
@@ -182,6 +230,10 @@ class _ShippingDetailsState extends State<ShippingDetails> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
+                  onSaved: (value) {
+                    //new
+                    _zipcodeController.text = value!;
+                  },
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {

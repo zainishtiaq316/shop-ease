@@ -23,6 +23,10 @@ class OrderModel {
   final String customerZipCode;
   final String customerDeviceToken;
 
+  final String customerAddress;
+  final String paymentMethod;
+  final bool paymentStatus;
+
   OrderModel(
       {required this.categoryId,
       required this.categoryName,
@@ -30,6 +34,9 @@ class OrderModel {
       required this.deliveryTime,
       required this.fullPrice,
       required this.isSale,
+      required this.customerAddress,
+      required this.paymentMethod,
+      required this.paymentStatus,
       required this.productDescription,
       required this.productId,
       required this.productImages,
@@ -72,6 +79,9 @@ class OrderModel {
       'customerStreet': customerStreet,
       'customerCity' : customerCity,
       'customerZipCode' : customerZipCode,
+      'customerAddress' : customerAddress,
+      'paymentMethod' : paymentMethod,
+      'paymentStatus' : paymentStatus,
       'customerDeviceToken': customerDeviceToken
     };
   }
@@ -100,6 +110,9 @@ class OrderModel {
         customerPhone: json['customerPhone'],
         customerStreet: json['customerStreet'],
         customerZipCode : json['customerZipCode'],
+        customerAddress :json['customerAddress'],
+        paymentMethod : json['paymentMethod'],
+        paymentStatus : json['paymentStatus'],
         customerDeviceToken: json['customerDeviceToken']);
   }
 }
