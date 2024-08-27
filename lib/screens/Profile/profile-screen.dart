@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopease/screens/Profile/edit-profile.dart';
 import 'package:shopease/screens/Profile/language-screen.dart';
 import 'package:shopease/screens/Profile/my-account.dart';
+import 'package:shopease/screens/auth-ui/splash-screen.dart';
 import 'package:shopease/screens/favourite/favourite-screen.dart';
 import 'package:shopease/screens/user-panel/all-orders-screen.dart';
 import 'package:shopease/utils/app-constant.dart';
@@ -347,24 +349,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 20, right: 20, bottom: 20),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.09,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20,
-                                        right: 20,
-                                        top: 15,
-                                        bottom: 15),
-                                    child: buttons(
-                                        "assets/images/logout.png",
-                                        "Log Out",
-                                        Colors.red,
-                                        Colors.red.shade100)),
+                              child: GestureDetector(
+                                onTap: (){
+                                  showAlertDialog(context);
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.09,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20,
+                                          right: 20,
+                                          top: 15,
+                                          bottom: 15),
+                                      child: buttons(
+                                          "assets/images/logout.png",
+                                          "Log Out",
+                                          Colors.red,
+                                          Colors.red.shade100)),
+                                ),
                               ),
                             )
                           ],
@@ -398,6 +405,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
         )
       ],
     );
+  }
+  showAlertDialog(BuildContext context) {
+
+  // set up the buttons
+  Widget cancelButton = TextButton(
+    child: Text("Cancel"),
+    onPressed:  () {
+Navigator.pop(context);
+    },
+  );
+  Widget continueButton = TextButton(
+    child: Text("logout"),
+    onPressed:  () {
+      _logout();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Log out"),
+    content: Text("Are you sure you want to log out?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+Future<void> _logout() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    try {
+      await FirebaseAuth.instance.signOut();
+      await googleSignIn.signOut();
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SplashScreen()));
+    } catch (e) {
+      print("Error logging out: $e");
+      // Handle error here, e.g., show a snackbar or dialog
+    }
   }
 
   Widget buttons(String imageLink, String name, Color color, Color background) {

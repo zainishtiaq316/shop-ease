@@ -19,14 +19,20 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
- //enter full-screen
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+  var result = await FlutterNotificationChannel().registerNotificationChannel(
+      description: 'For Showing Message Notification',
+      id: 'chats',
+      importance: NotificationImportance.IMPORTANCE_HIGH,
+      name: 'Chats');
+
+  
+
 
   //for setting orientation to portrait only
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown])
       .then((value) {
-    _initializeFirebase();
     runApp(const MyApp());
   });
 }
@@ -47,14 +53,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-_initializeFirebase() async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  var result = await FlutterNotificationChannel().registerNotificationChannel(
-      description: 'For Showing Message Notification',
-      id: 'chats',
-      importance: NotificationImportance.IMPORTANCE_HIGH,
-      name: 'Chats');
-
-  
-}
