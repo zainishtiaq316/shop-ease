@@ -27,6 +27,20 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  Stream<DocumentSnapshot<Map<String, dynamic>>> getAdminUserStream() {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .where('isAdmin', isEqualTo: true)
+        .limit(1) // Assuming you only want the first admin
+        .snapshots()
+        .map((snapshot) {
+      if (snapshot.docs.isEmpty) {
+        throw Exception('No admin user found');
+      }
+      return snapshot.docs.first;
+    });
+  }
+
   User? user = FirebaseAuth.instance.currentUser;
   final FavoriteController _favoriteController = Get.put(FavoriteController());
 
@@ -181,91 +195,101 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ],
                         )),
                     StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                        stream: FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user?.uid)
-                            .snapshots(),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(
-                                child: CircularProgressIndicator(
+                      stream: getAdminUserStream(), // Use the new stream here
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(
                               color: appColor,
-                            )); // Loading indicator while fetching data
-                          } else if (snapshot.hasError) {
-                            return Text('Error: ${snapshot.error}');
-                          } else {
-                            Map<String, dynamic>? userData =
-                                snapshot.data?.data();
-                            String? firstName = userData?['firstName'];
-                            String? SecondName = userData?['lastName'];
-                            String? email = userData?['email'];
-                            String? dateOfBirth = userData?['dateOfBirth'];
-                            String? gender = userData?['gender'];
-                            String? phone = userData?['phone'];
-                            bool ? isOnline = userData?['is_online'];
-                            String ? last_active = userData?['last_active'];
-                            String? language = userData?['language'];
-                            String uid = userData?['uid'];
-                            String userImg = userData?['userImg'];
-                            String userDeviceToken = userData?['userDeviceToken'];
-                            String userAddress = userData?['userAddress'];
-                            dynamic updatedTime = userData?['updatedTime'];
-                            dynamic updatedOn = userData?['updatedOn'];
-                            String street = userData?['street'];
-                            bool isActive = userData?['isActive'];
-                            bool isAdmin = userData?['isAdmin'];
-                            String city = userData?['city'];
-                            dynamic createdOn = userData?['createdOn'];
-                            String country = userData?['country'];
-                            dynamic joinedTime = userData?['joinedTime'];
+                            ),
+                          ); // Loading indicator while fetching data
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else if (!snapshot.hasData) {
+                          return Text('No data found');
+                        } else {
+                          Map<String, dynamic>? userData =
+                              snapshot.data?.data();
+                          if (userData == null) {
+                            return Text('No data available');
+                          }
 
-                            return Material(
-                              child: Container(
-                                width: Get.width / 3.0,
-                                height: Get.height / 16,
-                                decoration: BoxDecoration(
-                                    color: AppConstant.appSecondaryColor,
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                child: TextButton(
-                                  onPressed: () async {
-                                    Get.to(() => ChatScreen(
-                                          user: UserModel(
-                                              Gender: gender!,
-                                              isOnline: isOnline!,
-                                              lastActive: last_active!,
-                                              dateOfBirth: dateOfBirth!,
-                                              language: language!,
-                                              updatedOn: updatedOn,
-                                              updatedTime: updatedTime,
-                                              joinedTime: joinedTime,
-                                              country: country,
-                                              createdOn: createdOn,
-                                              email: email!,
-                                              city: city,
-                                              isAdmin: isAdmin,
-                                              isActive: isActive,
-                                              phone: phone!,
-                                              lastName: SecondName!,
-                                              street: street,
-                                              uid: uid,
-                                              userAddress: userAddress,
-                                              userDeviceToken: userDeviceToken,
-                                              userImg: userImg,
-                                              firstName: firstName!),
-                                        ));
-                                  },
-                                  child: Text(
-                                    "Chat",
-                                    style: TextStyle(
-                                      color: AppConstant.appTextColor,
-                                    ),
+                          String? firstName = userData['firstName'];
+                          String? secondName = userData['lastName'];
+                          String? email = userData['email'];
+                          String? dateOfBirth = userData['dateOfBirth'];
+                          String? gender = "userData['gender']";
+                          String? phone = userData['phone'];
+                          bool? isOnline = userData['is_online'];
+                          String? lastActive = userData['last_active'];
+                          String? language = userData['language'];
+                          String uid = userData['uid'];
+                          String userImg = userData['userImg'];
+                          String userDeviceToken = userData['userDeviceToken'];
+                          String userAddress = userData['userAddress'];
+                          dynamic updatedTime = userData['updatedTime'];
+                          dynamic updatedOn = userData['updatedOn'];
+                          String street = userData['street'];
+                          bool isActive = userData['isActive'];
+                          bool isAdmin = userData['isAdmin'];
+                          String city = userData['city'];
+                          dynamic createdOn = userData['createdOn'];
+                          String country = userData['country'];
+                          dynamic joinedTime = userData['joinedTime'];
+
+                          return Material(
+                            child: Container(
+                              width: Get.width / 3.0,
+                              height: Get.height / 16,
+                              decoration: BoxDecoration(
+                                color: AppConstant.appSecondaryColor,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: TextButton(
+                                onPressed: () async {
+                                  
+                                  Get.to(() => ChatScreen(
+                                        user: UserModel(
+                                          Gender: gender!,
+                                          isOnline: isOnline!,
+                                          lastActive: lastActive!,
+                                          dateOfBirth: dateOfBirth!,
+                                          language: language!,
+                                          updatedOn: updatedOn,
+                                          updatedTime: updatedTime,
+                                          joinedTime: joinedTime,
+                                          country: country,
+                                          createdOn: createdOn,
+                                          email: email!,
+                                          city: city,
+                                          isAdmin: isAdmin,
+                                          isActive: isActive,
+                                          phone: phone!,
+                                          lastName: secondName!,
+                                          street: street,
+                                          uid: uid,
+                                          userAddress: userAddress,
+                                          userDeviceToken: userDeviceToken,
+                                          userImg: userImg,
+                                          firstName: firstName!,
+                                        ),
+                                      ));
+                               
+                               
+                                },
+                                child: Text(
+                                  "Chat",
+                                  style: TextStyle(
+                                    color: AppConstant.appTextColor,
                                   ),
                                 ),
                               ),
-                            );
-                          }
-                        }),
+                            ),
+                          );
+                        }
+                      },
+                    )
                   ],
                 ),
               ),
