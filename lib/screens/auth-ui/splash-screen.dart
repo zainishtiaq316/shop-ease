@@ -1,14 +1,9 @@
 import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shopease/controllers/get-user-data-controller.dart';
-import 'package:shopease/screens/auth-ui/welcome-screen.dart';
-import 'package:shopease/screens/user-panel/main-screen.dart';
-import 'package:shopease/utils/app-constant.dart';
 import 'package:shopease/screens/home_page.dart';
+import 'package:shopease/utils/app-constant.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,57 +13,45 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  User? user = FirebaseAuth.instance.currentUser;
-
   @override
   void initState() {
     super.initState();
     Timer(Duration(seconds: 3), () {
-      loggedIn(context);
+      Get.offAll(() => HomePageView()); // Direct navigation to HomePageView
     });
-  }
-
-  Future<void> loggedIn(BuildContext context) async {
-    if (user != null) {
-      final GetUserDataController getUserDataController =
-          Get.put(GetUserDataController());
-      var userData = await getUserDataController.getUserData(user!.uid);
-      if (userData[0]['isAdmin'] == false) {
-        Get.offAll(() => HomePageView());
-      }
-    } else {
-      Get.offAll(() => WelcomeScreen());
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final Size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: appColor,
-     
-      body: Container(
-        child: Column(children: [
+      body: Column(
+        children: [
           Expanded(
             child: Container(
-              width: Get.width,
+              width: size.width,
               alignment: Alignment.center,
-              child: Lottie.asset('assets/images/splash-icon.json',repeat: false),
+              child: Lottie.asset(
+                'assets/images/splash-icon.json',
+                repeat: false,
+              ),
             ),
           ),
           Container(
             margin: EdgeInsets.only(bottom: 20.0),
-            width: Get.width,
+            width: size.width,
             alignment: Alignment.center,
             child: Text(
               AppConstant.appPoweredBy,
               style: TextStyle(
-                  color: AppConstant.appTextColor,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.bold),
+                color: AppConstant.appTextColor,
+                fontSize: 12.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           )
-        ]),
+        ],
       ),
     );
   }

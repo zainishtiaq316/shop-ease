@@ -1,18 +1,48 @@
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.8.0'
     repositories {
         google()
         mavenCentral()
     }
 
+//     subprojects {
+//         afterEvaluate { project ->
+//             if (project.hasProperty('android')) {
+//                 project.android {
+//                     if (namespace == null) {
+//                         namespace project.group
+//                     }
+//                }
+//            }
+//       }
+//    }
+
+subprojects {
+    afterEvaluate { project ->
+        // check only for "com.android.library" to not modify
+        // your "app" subproject. All plugins will have "com.android.library" plugin, and only your app "com.android.application"
+        // Change your application's namespace in main build.gradle and in main android block.
+
+        if (project.plugins.hasPlugin("com.android.library")) {
+            project.android {
+                if (namespace == null) {
+                    namespace project.group
+                }
+            }
+        }
+    }
+}
+
     dependencies {
         // START: FlutterFire Configuration
-        classpath 'com.google.gms:google-services:4.3.15'
         // END: FlutterFire Configuration
+        classpath 'com.google.gms:google-services:4.3.15'
+
         classpath 'com.android.tools.build:gradle:7.3.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+
 
 allprojects {
     repositories {
@@ -21,14 +51,19 @@ allprojects {
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
 subprojects {
-    project.evaluationDependsOn(':app')
+    project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
+// configurations.all {
+//     resolutionStrategy {
+//         force 'androidx.core:core-ktx:1.6.0'
+//     }
+// }
